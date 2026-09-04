@@ -1,0 +1,121 @@
+---
+import { EVENT, SPACE_APPS_URL, CREDITS } from '../data/event';
+---
+
+<footer data-chapter="mars" class="relative px-5 pt-16 pb-28 sm:px-8 sm:pb-16 lg:px-12">
+  <div class="mx-auto max-w-6xl">
+    <div class="flex flex-col items-center gap-6 border-t border-white/10 pt-12 text-center">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <img
+          src="/brand/riverhacks.webp"
+          alt="RiverHacks"
+          width="600"
+          height="180"
+          loading="lazy"
+          decoding="async"
+          class="h-8 w-auto sm:h-10"
+        />
+        <img
+          src="/brand/bracket.webp"
+          alt=""
+          aria-hidden="true"
+          width="220"
+          height="99"
+          loading="lazy"
+          decoding="async"
+          class="h-3.5 w-auto opacity-80 sm:h-4"
+        />
+        <img
+          src="/brand/spaceapps.webp"
+          alt="NASA International Space Apps Challenge"
+          width="680"
+          height="298"
+          loading="lazy"
+          decoding="async"
+          class="h-8 w-auto sm:h-10"
+        />
+      </div>
+
+      <p class="eyebrow text-cyan">{EVENT.tagline}</p>
+
+      <p class="max-w-xl text-[0.875rem] leading-relaxed text-ink-3">
+        RiverHacks is Austin Community College's official hackathon, participating in the
+        NASA International Space Apps Challenge as a local event in Austin. Not affiliated
+        with, or endorsed by, NASA beyond that participation.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-[0.875rem]">
+        {
+          EVENT.contacts.map((c) => (
+            <a
+              href={`mailto:${c.email}`}
+              class="text-ink-2 underline decoration-white/20 underline-offset-4 transition hover:text-cyan hover:decoration-cyan"
+            >
+              {c.email}
+            </a>
+          ))
+        }
+        <a
+          href={SPACE_APPS_URL}
+          target="_blank"
+          rel="noopener"
+          class="text-ink-2 underline decoration-white/20 underline-offset-4 transition hover:text-cyan hover:decoration-cyan"
+        >
+          spaceappschallenge.org
+        </a>
+      </div>
+
+      <p class="mt-2 flex flex-wrap items-center justify-center gap-2 text-[0.8125rem] text-ink-3">
+        <span>Powered by</span>
+        <a
+          href={EVENT.titlePartner.url}
+          target="_blank"
+          rel="noopener"
+          class="font-semibold text-ink underline decoration-white/25 underline-offset-4 transition hover:text-cyan hover:decoration-cyan"
+          >{EVENT.titlePartner.name}</a
+        >
+        <span aria-hidden="true">·</span>
+        <span>{EVENT.titlePartner.blurb}</span>
+      </p>
+
+      <!-- CC BY 4.0 requires visible attribution for the 3D assets. -->
+      <ul class="mt-6 space-y-1.5 text-[0.6875rem] leading-relaxed text-ink-3/80">
+        {
+          CREDITS.map((c) => (
+            <li>
+              {c.what}:{' '}
+              <a
+                href={c.workUrl}
+                target="_blank"
+                rel="noopener"
+                class="underline decoration-white/15 underline-offset-2 hover:text-ink-2"
+              >
+                &ldquo;{c.title}&rdquo;
+              </a>{' '}
+              by{' '}
+              <a
+                href={c.authorUrl}
+                target="_blank"
+                rel="noopener"
+                class="underline decoration-white/15 underline-offset-2 hover:text-ink-2"
+              >
+                {c.author}
+              </a>
+              , licensed under{' '}
+              <a
+                href={c.licenseUrl}
+                target="_blank"
+                rel="noopener"
+                class="underline decoration-white/15 underline-offset-2 hover:text-ink-2"
+              >
+                {c.license}
+              </a>
+              .
+            </li>
+          ))
+        }
+        <li>Earth imagery: NASA Visible Earth (Blue Marble), public domain.</li>
+      </ul>
+    </div>
+  </div>
+</footer>

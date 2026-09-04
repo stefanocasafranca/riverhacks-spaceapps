@@ -1,0 +1,82 @@
+---
+import { EVENT, REGISTER_URL, STATS } from '../data/event';
+---
+
+<section
+  data-chapter="pad"
+  class="relative flex min-h-[calc(100svh-7.5rem)] flex-col justify-between px-5 pt-2 pb-8 sm:min-h-[calc(100svh-8.5rem)] sm:px-8 lg:px-12"
+>
+
+  <!-- Headline block -->
+  <div class="scrim -mx-5 max-w-5xl px-5 py-8 sm:-mx-8 sm:px-8 sm:py-10 lg:-mx-12 lg:px-12">
+    <p
+      class="eyebrow mb-5 flex flex-col gap-y-1.5 text-[clamp(0.8rem,3.2vw,1.15rem)] text-ink-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-2"
+    >
+      <span class="text-cyan">{EVENT.dates.label}</span>
+      <span aria-hidden="true" class="hidden text-ink-3 sm:inline">/</span>
+      <span class="text-pink">{EVENT.venue.city}</span>
+    </p>
+
+    <h1 class="display-tight text-[clamp(2.3rem,10.8vw,6.8rem)]">
+      <span class="block">One weekend.</span>
+      <span class="block">One project.</span>
+      <span class="block text-cyan">Two competitions.</span>
+    </h1>
+
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+      <a
+        href={REGISTER_URL}
+        target="_blank"
+        rel="noopener"
+        class="group inline-flex items-center justify-center gap-2 rounded-full bg-cyan px-7 py-4 text-base font-semibold text-space transition hover:bg-cyan-hi focus-visible:bg-cyan-hi sm:text-[1.0625rem]"
+      >
+        Register to hack
+        <span
+          aria-hidden="true"
+          class="transition-transform group-hover:translate-x-0.5">&rarr;</span
+        >
+      </a>
+      <a
+        href="#sponsor"
+        class="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-4 text-base font-semibold text-ink transition hover:border-cyan hover:text-cyan sm:text-[1.0625rem]"
+      >
+        Sponsor RiverHacks
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Stat bar — the four headline numbers from the flyer -->
+  <div class="panel rounded-2xl px-2 py-4 sm:px-4">
+    <dl class="grid grid-cols-2 gap-y-5 sm:grid-cols-4">
+      {
+        STATS.map((s, i) => (
+          <div
+            class:list={[
+              'px-3 text-center sm:px-4',
+              i > 0 && 'sm:border-l sm:border-white/10',
+              i === 1 && 'border-l border-white/10 sm:border-l',
+              i === 3 && 'border-l border-white/10',
+            ]}
+          >
+            <dt class="sr-only">{s.label}</dt>
+            <dd>
+              <span
+                class:list={[
+                  'display block text-[clamp(1.6rem,7vw,2.5rem)]',
+                  s.accent === 'gold' && 'text-gold',
+                  s.accent === 'cyan' && 'text-cyan',
+                  s.accent === 'violet' && 'text-violet',
+                  s.accent === 'ink' && 'text-ink',
+                ]}
+              >
+                {s.value}
+              </span>
+              <span class="eyebrow mt-1.5 block text-ink-3">{s.label}</span>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>

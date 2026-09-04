@@ -1,0 +1,96 @@
+---
+import Section from './Section.astro';
+import { TRACKS, TRACKS_BRIDGE } from '../data/event';
+
+// Accent → utility maps, written out in full so Tailwind's scanner sees every
+// class name. Also avoids narrowing complaints: inside `t.link && ...` only the
+// NASA track survives, so an inline `t.accent === 'pink'` there is provably
+// dead code.
+const btn: Record<string, string> = {
+  cyan: 'border-cyan/45 text-cyan hover:bg-cyan hover:text-space',
+  pink: 'border-pink/45 text-pink hover:bg-pink hover:text-space',
+};
+---
+
+<Section
+  chapter="ascent"
+  id="tracks"
+  eyebrow="Pick your lane"
+  title="Two tracks.<br />One submission."
+  wide
+>
+  <div class="grid gap-5 md:grid-cols-2">
+    {
+      TRACKS.map((t) => (
+        <article
+          class:list={[
+            'panel relative overflow-hidden rounded-3xl p-6 sm:p-8',
+            t.accent === 'cyan' && 'border-cyan/25',
+            t.accent === 'pink' && 'border-pink/25',
+          ]}
+        >
+          {/* Corner glow keyed to the track colour */}
+          <div
+            aria-hidden="true"
+            class:list={[
+              'pointer-events-none absolute -top-24 -right-16 h-48 w-48 rounded-full blur-3xl',
+              t.accent === 'cyan' && 'bg-cyan/20',
+              t.accent === 'pink' && 'bg-pink/20',
+            ]}
+          />
+
+          <h3
+            class:list={[
+              'display relative text-[clamp(1.5rem,5vw,2rem)]',
+              t.accent === 'cyan' && 'text-cyan',
+              t.accent === 'pink' && 'text-pink',
+            ]}
+          >
+            {t.name}
+          </h3>
+          <p class="eyebrow relative mt-2.5 text-ink-3">{t.kicker}</p>
+
+          <p class="relative mt-5 text-[0.95rem] leading-relaxed text-ink-2 sm:text-base">
+            {t.body}
+          </p>
+
+          {t.themes.length > 0 && (
+            <ul class="relative mt-6 flex flex-wrap gap-2">
+              {t.themes.map((theme) => (
+                <li class="rounded-full border border-white/12 bg-white/[0.04] px-3 py-1.5 text-[0.8125rem] text-ink-2">
+                  {theme}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {t.link && (
+            <a
+              href={t.link.href}
+              target="_blank"
+              rel="noopener"
+              class:list={[
+                'group relative mt-7 inline-flex items-center gap-2 rounded-full border px-5 py-3 text-[0.9375rem] font-semibold transition',
+                btn[t.accent],
+              ]}
+            >
+              {t.link.label}
+              <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">
+                &rarr;
+              </span>
+            </a>
+          )}
+        </article>
+      ))
+    }
+  </div>
+
+  <!-- The bridge line: the whole point is that one project enters both -->
+  <div
+    class="relative mt-5 overflow-hidden rounded-2xl border border-violet/30 bg-gradient-to-r from-cyan/10 via-violet/15 to-pink/10 px-6 py-5 text-center"
+  >
+    <p class="display text-[clamp(1.05rem,4.2vw,1.6rem)] text-ink">
+      {TRACKS_BRIDGE}
+    </p>
+  </div>
+</Section>

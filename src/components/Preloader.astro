@@ -1,0 +1,266 @@
+---
+import { EVENT } from '../data/event';
+// Small, de-glowed copies of the two marks, inlined as data URIs.
+//
+// The full-size logos are 92KB and 61KB. On a throttled connection they were
+// still streaming while the loading screen displayed them — the loader was
+// visibly waiting on its own assets, painting half a RiverHacks lockup.
+// Inlining sub-13KB copies makes them part of the document, so they are on
+// screen in the first paint with no request of their own.
+import logos from '../data/preloader-logos.json';
+---
+
+<!--
+  Launch sequence loading screen.
+
+  Rendered in the HTML so it paints on the very first frame with no JS. The
+  <noscript> block below removes it entirely when scripting is off, so a no-JS
+  visitor never sees a loading screen that would have nothing to dismiss it.
+
+  It is an OVERLAY, not a gate: the real page is in the DOM underneath the whole
+  time, so crawlers, screen readers and Save-Data visitors get the full content
+  regardless of what happens here.
+-->
+<div id="preloader" role="status" aria-live="polite" aria-label="Loading">
+  <div class="pl-inner">
+    <div class="pl-logos">
+      <img
+        src={logos.riverhacks}
+        alt="RiverHacks"
+        width="340"
+        height="102"
+        class="pl-logo pl-logo-a"
+      />
+      <img
+        src={logos.bracket}
+        alt=""
+        aria-hidden="true"
+        width="88"
+        height="40"
+        class="pl-bracket"
+      />
+      <img
+        src={logos.spaceapps}
+        alt="NASA International Space Apps Challenge"
+        width="240"
+        height="105"
+        class="pl-logo pl-logo-b"
+      />
+    </div>
+
+    <div class="pl-track" aria-hidden="true">
+      <div class="pl-bar" id="pl-bar"></div>
+    </div>
+
+    <p class="pl-status"><span id="pl-pct">0</span><span class="pl-pct-sign">%</span></p>
+
+    <p class="pl-partner">
+      Powered by <strong>{EVENT.titlePartner.name}</strong>
+    </p>
+  </div>
+</div>
+
+<noscript>
+  <style>
+    #preloader {
+      display: none !important;
+    }
+  </style>
+</noscript>
+
+<style>
+  #preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    background: var(--color-space);
+    /* Fades out and stops intercepting input once the scene is ready. */
+    transition:
+      opacity 620ms ease,
+      visibility 0s linear 620ms;
+  }
+
+  #preloader[data-done='true'] {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .pl-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    width: min(26rem, 100%);
+    text-align: center;
+  }
+
+  .pl-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  /* Sized against the narrowest target: at 390px the three marks plus gaps
+     must fit inside the padded container, which caps height near 3rem. */
+  .pl-logo {
+    height: 2.9rem;
+    width: auto;
+  }
+  .pl-bracket {
+    height: 1.1rem;
+    width: auto;
+    opacity: 0.9;
+  }
+
+  @media (min-width: 480px) {
+    .pl-logo {
+      height: 3.6rem;
+    }
+    .pl-bracket {
+      height: 1.35rem;
+    }
+    .pl-logos {
+      gap: 1.15rem;
+    }
+  }
+
+  /*
+    The "shake". Deliberately a slow launch-pad tremor rather than a jitter —
+    two logos vibrating at different phases so it reads as one rig under load,
+    not as two broken images. Amplitude is sub-pixel-ish on purpose; anything
+    larger reads as a glitch on a small screen.
+  */
+  @keyframes pl-tremor-a {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    25% {
+      transform: translate3d(-0.9px, 0.5px, 0) rotate(-0.25deg);
+    }
+    50% {
+      transform: translate3d(0.6px, -0.7px, 0) rotate(0.2deg);
+    }
+    75% {
+      transform: translate3d(-0.4px, -0.3px, 0) rotate(-0.12deg);
+    }
+  }
+  @keyframes pl-tremor-b {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+    25% {
+      transform: translate3d(0.7px, -0.6px, 0) rotate(0.22deg);
+    }
+    50% {
+      transform: translate3d(-0.8px, 0.4px, 0) rotate(-0.18deg);
+    }
+    75% {
+      transform: translate3d(0.3px, 0.6px, 0) rotate(0.1deg);
+    }
+  }
+  @keyframes pl-bracket-pulse {
+    0%,
+    100% {
+      opacity: 0.45;
+      transform: scale(0.94);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+  }
+
+  .pl-logo-a {
+    animation: pl-tremor-a 0.42s linear infinite;
+  }
+  .pl-logo-b {
+    animation: pl-tremor-b 0.38s linear infinite;
+  }
+  .pl-bracket {
+    animation: pl-bracket-pulse 1.5s ease-in-out infinite;
+  }
+
+  .pl-track {
+    position: relative;
+    width: 100%;
+    height: 3px;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--color-cyan) 16%, transparent);
+    overflow: hidden;
+  }
+
+  .pl-bar {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-violet), var(--color-cyan) 60%, var(--color-cyan-hi));
+    /* Eases toward each new value so real download jumps don't snap. */
+    transition: width 380ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .pl-bar::after {
+    /* Travelling highlight — signals "still working" even when a single large
+       asset means the percentage sits still for a beat. */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+    animation: pl-sheen 1.15s ease-in-out infinite;
+  }
+  @keyframes pl-sheen {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  .pl-status {
+    margin: -0.6rem 0 0;
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 100, 'wght' 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    color: var(--color-cyan);
+    font-variant-numeric: tabular-nums;
+  }
+  .pl-pct-sign {
+    opacity: 0.55;
+    margin-left: 0.1em;
+  }
+
+  .pl-partner {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-3);
+  }
+  .pl-partner strong {
+    color: var(--color-ink-2);
+    font-weight: 600;
+  }
+
+  /*
+    Reduced motion: keep the screen and the bar (they carry information), drop
+    the tremor and the sheen (they carry none).
+  */
+  @media (prefers-reduced-motion: reduce) {
+    .pl-logo-a,
+    .pl-logo-b,
+    .pl-bracket,
+    .pl-bar::after {
+      animation: none;
+    }
+    .pl-bracket {
+      opacity: 0.9;
+    }
+  }
+</style>

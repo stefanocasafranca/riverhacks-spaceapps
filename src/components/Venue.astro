@@ -1,0 +1,55 @@
+---
+import Section from './Section.astro';
+import { EVENT, REGISTER_URL } from '../data/event';
+---
+
+<Section chapter="mars" id="venue" eyebrow="Save the date" title="Austin, Texas" accent="pink">
+  <div class="grid gap-5 md:grid-cols-2">
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <p class="display text-[clamp(1.75rem,7.5vw,3rem)] text-cyan">
+        {EVENT.dates.label}
+      </p>
+      <p class="eyebrow mt-3 text-pink">{EVENT.venue.city}</p>
+      <p class="mt-6 text-[0.9375rem] leading-relaxed text-ink-2">
+        Doors {EVENT.dates.startTime} Saturday. Two days, in person, teams of up to six —
+        or form one on the spot.
+      </p>
+    </div>
+
+    <address class="panel rounded-3xl p-6 not-italic sm:p-8">
+      <h3 class="eyebrow text-ink-3">Where</h3>
+      <p class="mt-4 text-[1.0625rem] font-medium text-ink">{EVENT.venue.name}</p>
+      <p class="mt-1 text-[0.9375rem] text-ink-2">{EVENT.venue.building}</p>
+      <p class="mt-3 text-[0.9375rem] text-ink-2">
+        {EVENT.venue.street}<br />{EVENT.venue.cityStateZip}
+      </p>
+      <p class="mt-3 text-[0.8125rem] text-ink-3">{EVENT.venue.note}</p>
+      <a
+        href={EVENT.venue.mapUrl}
+        target="_blank"
+        rel="noopener"
+        class="mt-6 inline-flex items-center gap-2 text-[0.9375rem] font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan"
+      >
+        Open in Maps <span aria-hidden="true">&rarr;</span>
+      </a>
+    </address>
+  </div>
+
+  <div
+    class="mt-5 flex flex-col items-center gap-4 rounded-3xl border border-cyan/25 bg-gradient-to-r from-cyan/10 to-violet/10 px-6 py-8 text-center sm:flex-row sm:justify-between sm:text-left"
+  >
+    <div>
+      <p class="display text-[clamp(1.25rem,5vw,1.9rem)]">Seats are limited to 200.</p>
+      <p class="mt-1.5 text-[0.9375rem] text-ink-2">Applications are reviewed as they come in.</p>
+    </div>
+    <a
+      href={REGISTER_URL}
+      target="_blank"
+      rel="noopener"
+      class="group inline-flex shrink-0 items-center gap-2 rounded-full bg-cyan px-7 py-4 text-base font-semibold text-space transition hover:bg-cyan-hi"
+    >
+      Register on Luma
+      <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
+    </a>
+  </div>
+</Section>

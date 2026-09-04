@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import { EVENT, SEO, REGISTER_URL } from '../data/event';
+
+// Preloaded so the hero headline — the LCP element — paints in Archivo rather
+// than swapping from the fallback a beat later. Same asset the @font-face in
+// global.css resolves to, so Vite emits one hashed file, not two.
+import Preloader from '../components/Preloader.astro';
+import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og.jpg', Astro.site).href;
+
+// Structured data so the event surfaces properly when the link is shared or
+// indexed — this page is going to live mostly as a pasted URL.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: 'RiverHacks 2026 — NASA Space Apps Challenge Austin',
+  description: SEO.description,
+  startDate: EVENT.dates.iso.start,
+  endDate: EVENT.dates.iso.end,
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  location: {
+    '@type': 'Place',
+    name: EVENT.venue.name,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: EVENT.venue.street,
+      addressLocality: 'Austin',
+      addressRegion: 'TX',
+      postalCode: '78701',
+      addressCountry: 'US',
+    },
+  },
+  organizer: { '@type': 'Organization', name: 'RiverHacks', url: canonical },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+    availability: 'https://schema.org/LimitedAvailability',
+    url: REGISTER_URL,
+    validFrom: '2026-08-26T00:00:00-05:00',
+  },
+  image: [ogImage],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{SEO.title}</title>
+    <meta name="description" content={SEO.description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#000b24" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preload" as="font" type="font/woff2" href={archivoLatin} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={SEO.title} />
+    <meta property="og:description" content={SEO.description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={SEO.title} />
+    <meta name="twitter:description" content={SEO.description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-cyan focus:px-4 focus:py-2 focus:font-semibold focus:text-space"
+      >Skip to content</a
+    >
+
+    <!--
+      Fallback ground. Rendered for everyone; the WebGL boot script hides it only
+      once three.js has produced a real frame, so a failed or skipped 3D load
+      leaves a finished-looking starfield rather than a black rectangle.
+    -->
+    <Preloader />
+
+    <div id="css-stars" aria-hidden="true"></div>
+
+    <canvas id="space-canvas" aria-hidden="true" data-ready="false"></canvas>
+
+    <div id="page">
+      <slot />
+    </div>
+
+    <script>
+      import '../three/boot';
+    </script>
+  </body>
+</html>

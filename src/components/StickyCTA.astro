@@ -1,0 +1,55 @@
+---
+import { REGISTER_URL } from '../data/event';
+---
+
+<!--
+  Mobile-only persistent register bar. Hidden while the hero (which already
+  carries the CTA) is on screen, so it doesn't duplicate itself above the fold.
+-->
+<div
+  id="sticky-cta"
+  data-visible="false"
+  class="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 transition-all duration-300 sm:hidden"
+>
+  <div
+    class="pointer-events-auto flex items-center gap-3 rounded-2xl border border-cyan/25 bg-space-2/90 p-2 pl-4 backdrop-blur-xl"
+  >
+    <p class="min-w-0 flex-1 text-[0.8125rem] leading-tight text-ink-2">
+      <span class="block font-semibold text-ink">Nov 14–15 · Austin</span>
+      200 seats · free
+    </p>
+    <a
+      href={REGISTER_URL}
+      target="_blank"
+      rel="noopener"
+      class="shrink-0 rounded-xl bg-cyan px-5 py-3 text-[0.9375rem] font-semibold text-space"
+    >
+      Register
+    </a>
+  </div>
+</div>
+
+<style>
+  #sticky-cta[data-visible='false'] {
+    opacity: 0;
+    transform: translateY(120%);
+  }
+  #sticky-cta[data-visible='true'] {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  const bar = document.getElementById('sticky-cta');
+  const hero = document.querySelector('[data-chapter="pad"]');
+
+  if (bar && hero && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([entry]) => {
+        bar.dataset.visible = String(!entry.isIntersecting);
+      },
+      { rootMargin: '-40% 0px 0px 0px' },
+    ).observe(hero);
+  }
+</script>

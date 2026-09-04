@@ -1,0 +1,46 @@
+---
+interface Props {
+  chapter: string;
+  id?: string;
+  eyebrow?: string;
+  title?: string;
+  accent?: 'cyan' | 'pink' | 'violet' | 'gold';
+  wide?: boolean;
+  class?: string;
+}
+const { chapter, id, eyebrow, title, accent = 'cyan', wide = false, class: cls } = Astro.props;
+---
+
+<section
+  id={id}
+  data-chapter={chapter}
+  class:list={['relative px-5 py-20 sm:px-8 sm:py-28 lg:px-12 lg:py-32', cls]}
+>
+  <div class:list={['mx-auto', wide ? 'max-w-6xl' : 'max-w-4xl']}>
+    {
+      (eyebrow || title) && (
+        <header class="scrim-text mb-10 sm:mb-14">
+          {eyebrow && (
+            <p
+              class:list={[
+                'eyebrow mb-4',
+                accent === 'cyan' && 'text-cyan',
+                accent === 'pink' && 'text-pink',
+                accent === 'violet' && 'text-violet',
+                accent === 'gold' && 'text-gold',
+              ]}
+            >
+              {eyebrow}
+            </p>
+          )}
+          {title && (
+            <h2 class="display text-[clamp(2rem,8vw,4rem)]">
+              <Fragment set:html={title} />
+            </h2>
+          )}
+        </header>
+      )
+    }
+    <slot />
+  </div>
+</section>

@@ -1,0 +1,232 @@
+---
+import { EVENT } from '../data/event';
+---
+
+<!--
+  Page-level sticky header.
+
+  Deliberately NOT inside the hero <section>: a sticky element is only sticky
+  within its own scroll container, so while this lived in the hero it stopped
+  sticking the moment you scrolled past it.
+
+  It condenses on scroll rather than staying full height — at 100svh on a phone,
+  a permanent full-size lockup plus the partner credit would eat ~13% of the
+  viewport on every section of the page.
+-->
+<header id="site-header" data-compact="false" class="sticky top-0 z-30">
+  <div class="hdr-inner px-4 sm:px-8 lg:px-12">
+    <div class="hdr-logos">
+      <img
+        src="/brand/riverhacks.webp"
+        alt="RiverHacks"
+        width="600"
+        height="180"
+        fetchpriority="high"
+        decoding="async"
+        class="hdr-logo"
+      />
+      <img
+        src="/brand/bracket.webp"
+        alt=""
+        aria-hidden="true"
+        width="220"
+        height="99"
+        decoding="async"
+        class="hdr-bracket"
+      />
+      <img
+        src="/brand/spaceapps.webp"
+        alt="NASA International Space Apps Challenge"
+        width="680"
+        height="298"
+        fetchpriority="high"
+        decoding="async"
+        class="hdr-logo"
+      />
+    </div>
+
+    <p class="hdr-partner">
+      <span>
+        Powered by{' '}
+        <a
+          href={EVENT.titlePartner.url}
+          target="_blank"
+          rel="noopener"
+          class="font-semibold text-ink-2 underline decoration-white/25 underline-offset-4 transition hover:text-cyan hover:decoration-cyan"
+          >{EVENT.titlePartner.name}</a
+        >
+      </span>
+      <span aria-hidden="true" class="hdr-dot">·</span>
+      <span class="hdr-blurb">{EVENT.titlePartner.blurb}</span>
+    </p>
+  </div>
+</header>
+
+<style>
+  #site-header {
+    /* Transparent at rest so the 3D scene reads straight through it; gains a
+       scrim only once content is scrolling underneath. */
+    background: transparent;
+    transition:
+      background-color 260ms ease,
+      backdrop-filter 260ms ease,
+      border-color 260ms ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  #site-header[data-compact='true'] {
+    background: color-mix(in oklab, var(--color-space) 82%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border-bottom-color: color-mix(in oklab, var(--color-cyan) 14%, transparent);
+  }
+
+  .hdr-inner {
+    padding-block: 0.85rem;
+    transition: padding-block 260ms ease;
+  }
+  #site-header[data-compact='true'] .hdr-inner {
+    padding-block: 0.55rem;
+  }
+
+  /*
+    Mobile: space-between so the lockup spans edge to edge — the marks are
+    sized to the largest height that still fits 390px with 16px gutters.
+    Desktop: normal left-aligned flow.
+  */
+  .hdr-logos {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  /*
+    Height scales with viewport width below the sm breakpoint. The three marks
+    plus gaps come to roughly 6.5x the logo height, so a fixed 52px (tuned for
+    390px) overflowed a 360px phone by 37px. 13vw keeps the row edge-to-edge
+    from 320px up without ever exceeding the available width.
+  */
+  .hdr-logo {
+    height: clamp(2.4rem, 13vw, 3.25rem);
+    width: auto;
+    transition: height 260ms ease;
+  }
+  .hdr-bracket {
+    height: clamp(0.9rem, 4.6vw, 1.25rem);
+    width: auto;
+    opacity: 0.9;
+    flex-shrink: 0;
+    transition: height 260ms ease;
+  }
+
+  #site-header[data-compact='true'] .hdr-logo {
+    height: 2.1rem;
+  }
+  #site-header[data-compact='true'] .hdr-bracket {
+    height: 0.85rem;
+  }
+
+  .hdr-partner {
+    margin: 0.6rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.8125rem;
+    color: var(--color-ink-3);
+    transition:
+      margin 260ms ease,
+      opacity 200ms ease;
+  }
+  .hdr-dot {
+    display: none;
+    color: color-mix(in oklab, var(--color-ink-3) 60%, transparent);
+  }
+
+  /* Compact on a phone drops the blurb and keeps just the attribution, so the
+     sticky bar stays one short line. */
+  #site-header[data-compact='true'] .hdr-partner {
+    margin-top: 0.35rem;
+  }
+  #site-header[data-compact='true'] .hdr-blurb {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .hdr-logos {
+      justify-content: flex-start;
+      gap: 1.15rem;
+    }
+    .hdr-logo {
+      height: 3.75rem;
+    }
+    .hdr-bracket {
+      height: 1.35rem;
+    }
+    #site-header[data-compact='true'] .hdr-logo {
+      height: 2.5rem;
+    }
+    #site-header[data-compact='true'] .hdr-bracket {
+      height: 0.95rem;
+    }
+    .hdr-partner {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+    .hdr-dot {
+      display: inline;
+    }
+    #site-header[data-compact='true'] .hdr-blurb {
+      display: inline;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hdr-logo {
+      height: 4.75rem;
+    }
+    #site-header[data-compact='true'] .hdr-logo {
+      height: 2.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #site-header,
+    .hdr-inner,
+    .hdr-logo,
+    .hdr-bracket,
+    .hdr-partner {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // Condense once the page has scrolled past a small threshold. Plain passive
+  // scroll listener rather than IntersectionObserver so it also reflects
+  // Lenis-driven scrolling on desktop, which moves native scrollTop.
+  const header = document.getElementById('site-header');
+
+  if (header) {
+    let ticking = false;
+    const apply = () => {
+      header.dataset.compact = String(window.scrollY > 24);
+      ticking = false;
+    };
+    apply();
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      },
+      { passive: true },
+    );
+  }
+</script>

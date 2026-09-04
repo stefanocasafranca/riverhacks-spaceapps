@@ -1,0 +1,152 @@
+---
+import Section from './Section.astro';
+import { TIERS, SPONSOR_AUDIENCE, SPONSOR_CLOSER, EVENT } from '../data/event';
+
+// Accent → utility map. Kept explicit rather than interpolated so Tailwind's
+// scanner can see every class name it needs to emit.
+const ring: Record<string, string> = {
+  pink: 'border-pink/35',
+  cyan: 'border-cyan/35',
+  gold: 'border-gold/35',
+  violet: 'border-violet/45',
+  ink: 'border-white/30',
+};
+const text: Record<string, string> = {
+  pink: 'text-pink',
+  cyan: 'text-cyan',
+  gold: 'text-gold',
+  violet: 'text-violet',
+  ink: 'text-ink',
+};
+const glow: Record<string, string> = {
+  pink: 'bg-pink/15',
+  cyan: 'bg-cyan/15',
+  gold: 'bg-gold/15',
+  violet: 'bg-violet/20',
+  ink: 'bg-white/10',
+};
+---
+
+<Section
+  chapter="mars"
+  id="sponsor"
+  eyebrow="Partner with us"
+  title="Sponsor<br />RiverHacks"
+  accent="violet"
+  wide
+>
+  <p class="-mt-6 mb-10 max-w-2xl text-[0.975rem] leading-relaxed text-ink-2 sm:text-lg">
+    {EVENT.sponsorTagline} Put your tools in 200 builders' hands for a weekend, and your
+    name on the work that comes out of it.
+  </p>
+
+  <!-- Who's in the room -->
+  <dl class="panel mb-10 grid grid-cols-2 gap-y-6 rounded-2xl px-2 py-6 sm:grid-cols-4 sm:px-4">
+    {
+      SPONSOR_AUDIENCE.map((s, i) => (
+        <div
+          class:list={[
+            'px-3 text-center sm:px-4',
+            i % 2 === 1 && 'border-l border-white/10',
+            i > 0 && 'sm:border-l sm:border-white/10',
+          ]}
+        >
+          <dt class="sr-only">{s.label}</dt>
+          <dd>
+            <span class="display block text-[clamp(1.5rem,6.5vw,2.25rem)] text-violet">
+              {s.value}
+            </span>
+            <span class="mt-1.5 block text-[0.75rem] leading-snug text-ink-3">{s.label}</span>
+          </dd>
+        </div>
+      ))
+    }
+  </dl>
+
+  <p class="eyebrow mb-4 text-ink-3 md:hidden">Swipe through the tiers &rarr;</p>
+
+  <!-- items-start, not stretch: equal heights would pad the two-bullet Startup
+       card out to the five-bullet Title Partner card's height on mobile. -->
+  <ul class="rail items-start">
+    {
+      TIERS.map((t) => (
+        <li
+          class:list={[
+            'panel relative flex flex-col overflow-hidden rounded-3xl p-6 md:flex-row md:items-start md:gap-7 md:p-7',
+            ring[t.accent],
+            t.status?.tone === 'taken' && 'opacity-75',
+          ]}
+        >
+          <div
+            aria-hidden="true"
+            class:list={[
+              'pointer-events-none absolute -top-20 -left-12 h-44 w-44 rounded-full blur-3xl',
+              glow[t.accent],
+            ]}
+          />
+
+          {/* Name + price. Stacks above the benefits on phone, becomes the
+              left column of the flyer's ladder row from md: up. */}
+          <div class="relative md:w-60 md:shrink-0">
+            <span aria-hidden="true" class="text-2xl leading-none">
+              {t.icon}
+            </span>
+            <h3 class:list={['display mt-3 text-[clamp(1.25rem,5vw,1.6rem)]', text[t.accent]]}>
+              {t.name}
+            </h3>
+            <p class="display mt-2 text-[clamp(1.6rem,7vw,2.25rem)] text-ink tabular-nums">
+              {t.price}
+            </p>
+            {t.status && (
+              <p
+                class:list={[
+                  'eyebrow mt-3 inline-block rounded-full border px-2.5 py-1',
+                  t.status.tone === 'open'
+                    ? 'border-violet/50 text-violet'
+                    : 'border-white/20 text-ink-3',
+                ]}
+              >
+                {t.status.label}
+              </p>
+            )}
+          </div>
+
+          <ul class="relative mt-6 flex-1 space-y-2.5 border-t border-white/8 pt-5 md:mt-0 md:border-t-0 md:border-l md:border-white/8 md:pt-1 md:pl-7">
+            {t.benefits.map((b) => (
+              <li class="flex gap-2.5 text-[0.875rem] leading-relaxed text-ink-2 sm:text-[0.9375rem]">
+                <span aria-hidden="true" class:list={['mt-[0.45em] h-1 w-1 shrink-0 rounded-full', text[t.accent], 'bg-current']} />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- Closer, lifted from the sponsorship flyer -->
+  <div class="scrim-text mt-12 text-center">
+    <p class="display text-[clamp(1.5rem,6.5vw,2.75rem)]">
+      {SPONSOR_CLOSER.lines.map((l) => <span class="block">{l}</span>)}
+    </p>
+    <p
+      class="mt-3 text-[clamp(1.5rem,6vw,2.5rem)] text-pink italic"
+      style="font-family: var(--font-display); font-variation-settings: 'wdth' 90, 'wght' 500;"
+    >
+      {SPONSOR_CLOSER.script}
+    </p>
+
+    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      {
+        EVENT.contacts.map((c) => (
+          <a
+            href={`mailto:${c.email}?subject=RiverHacks%202026%20sponsorship`}
+            class="inline-flex items-center justify-center rounded-full border border-violet/40 px-6 py-3.5 text-[0.9375rem] font-medium text-ink transition hover:border-violet hover:text-violet"
+          >
+            {c.email}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</Section>

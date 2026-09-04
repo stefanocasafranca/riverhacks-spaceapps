@@ -1,0 +1,73 @@
+---
+import Section from './Section.astro';
+import { PRIZES, DEADLINES } from '../data/event';
+---
+
+<Section chapter="orbit" id="prizes" eyebrow="What you're playing for" title="Prizes" accent="gold">
+  <div class="grid gap-5 lg:grid-cols-[1.35fr_1fr]">
+    <!-- Award ladder -->
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <div class="flex items-baseline justify-between gap-4 border-b border-white/10 pb-5">
+        <h3 class="eyebrow text-ink-3">Total pool</h3>
+        <p class="display text-[clamp(2rem,9vw,3.25rem)] text-gold">{PRIZES.total}</p>
+      </div>
+
+      <ul class="mt-2 divide-y divide-white/8">
+        {
+          PRIZES.awards.map((a) => (
+            <li class="flex items-center gap-4 py-4">
+              <span aria-hidden="true" class="text-xl leading-none sm:text-2xl">
+                {a.medal}
+              </span>
+              <div class="min-w-0 flex-1">
+                <p class="text-[0.95rem] font-medium text-ink sm:text-base">{a.place}</p>
+                {'note' in a && a.note && (
+                  <p class="mt-1 text-[0.8125rem] leading-snug text-ink-3">{a.note}</p>
+                )}
+              </div>
+              <span
+                class:list={[
+                  'display shrink-0 text-[clamp(1.15rem,5vw,1.75rem)] tabular-nums',
+                  a.accent === 'gold' && 'text-gold',
+                  a.accent === 'violet' && 'text-violet',
+                  a.accent === 'ink' && 'text-ink',
+                ]}
+              >
+                {a.amount}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- The two Sunday deadlines sit next to the prizes: what you win, and when
+         you have to ship to be eligible for it. -->
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="eyebrow text-ink-3">Two deadlines — Sunday</h3>
+      <ul class="mt-6 space-y-6">
+        {
+          DEADLINES.map((d) => (
+            <li>
+              <p
+                class:list={[
+                  'display text-[clamp(1.4rem,6vw,2rem)] tabular-nums',
+                  d.accent === 'cyan' && 'text-cyan',
+                  d.accent === 'pink' && 'text-pink',
+                ]}
+              >
+                {d.time}
+              </p>
+              <p class="mt-1.5 text-[0.95rem] font-medium text-ink">{d.label}</p>
+              <p class="text-[0.875rem] text-ink-3">{d.detail}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-7 border-t border-white/10 pt-5 text-[0.8125rem] leading-relaxed text-ink-3">
+        Ship once before 1:00 PM to be judged in Austin, then push the same project to the
+        global submission by 11:59 PM.
+      </p>
+    </div>
+  </div>
+</Section>

@@ -1,0 +1,335 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Fonts.
+
+   Declared by hand against the *latin* subsets only, rather than importing
+   Fontsource's index CSS. That index ships Greek, Cyrillic and Vietnamese
+   faces too — browsers wouldn't download them (unicode-range gates that), but
+   they'd still be emitted into the deploy, and referencing the files directly
+   is what lets Base.astro preload the exact hashed asset the headline needs.
+
+   Archivo's variable font carries both axes, so one file covers the whole
+   condensed-display range used across the page (wdth 62–125 x wght 100–900).
+--------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Archivo Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  src: url('@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('@fontsource-variable/inter/files/inter-latin-wght-normal.woff2')
+    format('woff2-variations');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ---------------------------------------------------------------------------
+   Design tokens.
+
+   Every colour below was sampled directly out of the three 2026 flyer PNGs
+   (dominant-colour + saturation clustering), so the site and the print/social
+   assets are the same palette rather than an approximation of it.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Grounds — #000B24 is the flyer field, #040408 the outer frame */
+  --color-void: #040408;
+  --color-space: #000b24;
+  --color-space-2: #001033;
+  --color-space-3: #001a4d;
+
+  /* Accents */
+  --color-cyan: #24b4f0; /* dates, track headings, "LAUNCH CHANGE" */
+  --color-cyan-hi: #7fd4ff;
+  --color-pink: #fc4884; /* "CHALLENGE", "AUSTIN, TEXAS", deadlines */
+  --color-violet: #b490f0; /* the <> mark, Platinum tier */
+  --color-gold: #fad26e; /* prizes, Gold tier */
+
+  /* Neutrals tuned for a dark field — never pure grey */
+  --color-ink: #ffffff;
+  --color-ink-2: #b8c6e0;
+  --color-ink-3: #7f90b0;
+
+  --font-display: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Chapter count — kept here so CSS and TS agree on the scroll geometry */
+  --chapters: 5;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+@layer base {
+  html {
+    /* Fallback ground: shows when WebGL is skipped, and sits behind the
+       canvas as an anti-flash colour while three.js is still loading. */
+    background-color: var(--color-space);
+    /*
+      `clip`, not `hidden`. The .scrim-text::before bleed extends past the
+      viewport by design, which grew the document's scrollWidth. `hidden` would
+      stop the scroll but also turn this into a scroll container, which breaks
+      `position: sticky` on the site header; `clip` prevents the scroll without
+      establishing one.
+    */
+    overflow-x: clip;
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Locked while the launch-sequence overlay is up, so the visitor can't
+     scroll the page behind it and land mid-document on reveal. Removed by
+     three/boot.ts, which then fires a resize so Lenis re-measures. */
+  html.is-loading,
+  html.is-loading body {
+    overflow: hidden;
+    height: 100%;
+  }
+
+  /* Lenis drives scroll on desktop; native scroll everywhere else. */
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: transparent; /* let the canvas through */
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  /* The header is sticky, so in-page anchors (#tracks, #sponsor, the skip
+     link) would otherwise land with the section's heading hidden underneath
+     it. Offset every jump target by roughly the compact header height. */
+  main[id],
+  section[id],
+  footer[id] {
+    scroll-margin-top: 5.5rem;
+  }
+  @media (width >= 640px) {
+    main[id],
+    section[id],
+    footer[id] {
+      scroll-margin-top: 6.75rem;
+    }
+  }
+
+  ::selection {
+    background: var(--color-cyan);
+    color: var(--color-space);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-cyan);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Layering: fixed WebGL canvas behind a relatively-positioned page.
+
+   Deliberately NOT the z-index:-1 trick air.inc uses — that only works when the
+   root element has no background, which would cost us the no-JS fallback
+   ground colour. Canvas at z-0 + page at z-1 is visually identical and keeps
+   html's background as a safety net.
+--------------------------------------------------------------------------- */
+@layer components {
+  #space-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    pointer-events: none;
+    /* Sized in JS from visualViewport — never 100vh. Opacity is faded in once
+       the first frame has actually rendered, so there's no black flash. */
+    opacity: 0;
+    transition: opacity 900ms ease-out;
+  }
+  #space-canvas[data-ready='true'] {
+    opacity: 1;
+  }
+
+  #page {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Heavy condensed display face, matching the flyer headline treatment.
+     One variable font covers wdth 62–125 × wght 100–900. */
+  .display {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 68, 'wght' 800;
+    text-transform: uppercase;
+    line-height: 0.88;
+    letter-spacing: -0.01em;
+  }
+  .display-tight {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 62, 'wght' 900;
+    text-transform: uppercase;
+    line-height: 0.84;
+    letter-spacing: -0.015em;
+  }
+  /* Wide-tracked small caps used for eyebrows/labels on the flyers */
+  .eyebrow {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 100, 'wght' 700;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.6875rem;
+    line-height: 1;
+  }
+
+  /* Readability scrim. Text sits over a live 3D scene whose luminance changes
+     with scroll, so every copy block gets its own local contrast floor rather
+     than relying on the scene staying dark. */
+  .scrim {
+    background:
+      radial-gradient(120% 100% at 50% 40%, color-mix(in oklab, var(--color-space) 82%, transparent) 0%, transparent 72%);
+  }
+
+  /* Left-anchored variant for editorial text blocks that sit over the scene
+     with no panel behind them. The vehicle is bright white and passes directly
+     through this column during the ascent chapter, so bare text needs its own
+     contrast floor. */
+  .scrim-text {
+    position: relative;
+  }
+  .scrim-text > * {
+    position: relative;
+    z-index: 1;
+  }
+  .scrim-text::before {
+    content: '';
+    position: absolute;
+    inset: -12% -18%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        75% 65% at 32% 50%,
+        color-mix(in oklab, var(--color-space) 90%, transparent) 0%,
+        color-mix(in oklab, var(--color-space) 62%, transparent) 45%,
+        transparent 78%
+      );
+  }
+  .panel {
+    background: color-mix(in oklab, var(--color-space-2) 80%, transparent);
+    border: 1px solid color-mix(in oklab, var(--color-cyan) 18%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  /* Sponsor tiers: a horizontal scroll-snap rail on phones so 22 benefit
+     bullets don't become a 4000px wall, and the flyer's stacked ladder from
+     md: up where there's room for it. Same markup either way. */
+  .rail {
+    display: flex;
+    gap: 0.875rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 1.25rem;
+    padding-inline: 1.25rem;
+    /* bleed past the section's padding so cards can run to the screen edge */
+    margin-inline: -1.25rem;
+  }
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+  .rail > * {
+    scroll-snap-align: center;
+    flex: 0 0 min(82vw, 21rem);
+  }
+
+  @media (width >= 48rem) {
+    .rail {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      overflow: visible;
+      padding-inline: 0;
+      margin-inline: 0;
+    }
+    .rail > * {
+      flex: none;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   No-WebGL fallback: a pure-CSS starfield. Used when the capability gate
+   declines to load three.js (reduced motion, Save-Data, no WebGL2).
+--------------------------------------------------------------------------- */
+@layer components {
+  #css-stars {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(1.5px 1.5px at 18% 22%, #fff 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 72% 14%, #cfe6ff 50%, transparent 51%),
+      radial-gradient(1px 1px at 41% 63%, #fff 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 88% 71%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 9% 84%, #b9d8ff 50%, transparent 51%),
+      radial-gradient(2px 2px at 57% 39%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 31% 8%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 64% 92%, #cfe6ff 50%, transparent 51%),
+      radial-gradient(90% 60% at 70% 12%, color-mix(in oklab, var(--color-cyan) 12%, transparent), transparent 70%),
+      radial-gradient(80% 55% at 20% 88%, color-mix(in oklab, var(--color-violet) 10%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--color-void) 0%, var(--color-space) 45%, var(--color-space-2) 100%);
+    background-size:
+      420px 420px, 380px 380px, 300px 300px, 500px 500px, 340px 340px, 460px 460px, 280px 280px, 520px 520px,
+      100% 100%, 100% 100%, 100% 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Lenis. Loaded only on pointer-fine devices (see three/scroll.ts) — touch
+   keeps native momentum scrolling.
+--------------------------------------------------------------------------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* The CSS starfield cross-fades out once WebGL has painted its first frame. */
+#css-stars {
+  transition: opacity 700ms ease-out;
+}

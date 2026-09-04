@@ -1,0 +1,17 @@
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/textures/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# NOTE: Cloudflare does not compress model/gltf-binary, and overriding the
+# content-type to application/octet-stream does not change that (measured on a
+# live deploy). The meshopt GLBs therefore ship uncompressed: 170KB phone,
+# 266KB desktop. Pre-gzipping the files and declaring Content-Encoding here
+# would recover ~48KB / ~76KB if that ever becomes worth the fragility.
+/models/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
