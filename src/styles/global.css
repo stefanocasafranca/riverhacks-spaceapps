@@ -280,6 +280,12 @@
     .rail > * {
       flex: none;
     }
+    /* Three open sponsor tiers sit side by side, smaller than the secured
+       sponsor cards above them. */
+    .rail.tiers-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
   }
 }
 

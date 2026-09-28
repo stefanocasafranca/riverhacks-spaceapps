@@ -1,9 +1,9 @@
 ---
-import { REGISTER_URL } from '../data/event';
+import { REGISTRATION } from '../data/event';
 ---
 
 <!--
-  Mobile-only persistent register bar. Hidden while the hero (which already
+  Mobile-only persistent status bar (registration closed; was the Register CTA). Hidden while the hero (which already
   carries the CTA) is on screen, so it doesn't duplicate itself above the fold.
 -->
 <div
@@ -16,15 +16,13 @@ import { REGISTER_URL } from '../data/event';
   >
     <p class="min-w-0 flex-1 text-[0.8125rem] leading-tight text-ink-2">
       <span class="block font-semibold text-ink">Nov 14–15 · Austin</span>
-      200 seats · free
+      {REGISTRATION.closed} {REGISTRATION.full}
     </p>
     <a
-      href={REGISTER_URL}
-      target="_blank"
-      rel="noopener"
-      class="shrink-0 rounded-xl bg-cyan px-5 py-3 text-[0.9375rem] font-semibold text-space"
+      href="#participate"
+      class="shrink-0 rounded-xl border border-cyan/50 px-4 py-3 text-[0.9375rem] font-semibold text-cyan"
     >
-      Register
+      Details
     </a>
   </div>
 </div>

@@ -9,8 +9,96 @@
  * Change a price, a deadline, or a benefit here and it updates everywhere.
  */
 
-// Primary conversion on the entire page.
+// Luma event page. Registration is CLOSED (all 200 seats filled), so nothing
+// on the site links here as a call to action any more. Kept for the JSON-LD.
 export const REGISTER_URL = 'https://luma.com/n9rvutt0';
+
+// --- Registration status ----------------------------------------------------
+export const REGISTRATION = {
+  closed: 'Registration is closed.',
+  full: 'All 200 seats are filled.',
+  spaceApps: 'Anyone can still join NASA Space Apps online.',
+} as const;
+
+// --- Legal / minors ---------------------------------------------------------
+// Filling a URL below swaps the public "coming soon" text for a real link.
+// TODO(Stefano): parent/guardian consent form URL (link out only, no uploads).
+export const CONSENT_FORM_URL = '';
+// TODO(Stefano): RiverHacks Participant Waiver URL.
+export const WAIVER_URL = '';
+export const FORMS_COMING_SOON =
+  'Coming soon, available by October 5, 2026. We are finalizing it with ACC.';
+
+// Minors must finish the consent form AND one orientation by this date.
+export const MINORS_DEADLINE = 'October 17, 2026';
+
+const ORIENTATION_TITLE = 'RiverHacks guardian orientation (required)';
+const ORIENTATION_PAGE = 'https://riverhacks-spaceapps.org/legal#orientation';
+const orientationDetails = (meet: string) =>
+  `Required to participate in RiverHacks 2026 for participants under 18. Parents and guardians attend one session; participants are strongly recommended to join them. Google Meet: ${meet} . Details: ${ORIENTATION_PAGE}`;
+
+const googleCalUrl = (start: string, end: string, meet: string) =>
+  'https://calendar.google.com/calendar/render?' +
+  new URLSearchParams({
+    action: 'TEMPLATE',
+    text: ORIENTATION_TITLE,
+    dates: `${start}/${end}`,
+    details: orientationDetails(meet),
+    location: meet,
+  }).toString().replace('%2F', '/');
+
+const MEET_OCT16 = 'https://meet.google.com/akp-uzww-hsp';
+const MEET_OCT17 = 'https://meet.google.com/yeh-hqhd-kdd';
+
+export const ORIENTATION = {
+  // A guardian attends ONE of these sessions (Google Meet). Times in UTC for calendars.
+  sessions: [
+    {
+      id: 'oct16',
+      label: 'Friday, October 16, 2026, 7:00 to 7:45 PM CT',
+      meet: MEET_OCT16,
+      google: googleCalUrl('20261017T000000Z', '20261017T004500Z', MEET_OCT16),
+      ics: '/calendar/orientation-oct16.ics',
+    },
+    {
+      id: 'oct17',
+      label: 'Saturday, October 17, 2026, 10:30 to 11:15 AM CT',
+      meet: MEET_OCT17,
+      google: googleCalUrl('20261017T153000Z', '20261017T161500Z', MEET_OCT17),
+      ics: '/calendar/orientation-oct17.ics',
+    },
+  ],
+} as const;
+export const SPACE_APPS_LEGAL_URL = 'https://www.spaceappschallenge.org/legal/';
+export const LEGAL_CONTACT = 'stefano.casafrancalaos@austincc.edu';
+export const MINORS_NOTICE =
+  'Under 18 on November 14? A parent or guardian must complete these steps by October 17.';
+export const LEGAL_MINORS_HREF = '/legal#minors';
+
+// --- Secured sponsors -------------------------------------------------------
+export const SPONSORS = {
+  title: {
+    tier: 'Title Sponsor',
+    name: 'SerpApi',
+    url: 'https://serpapi.com/',
+    logo: '/brand/serpapi-logo-white.svg',
+    width: 4680,
+    height: 1340,
+    credit: 'RiverHacks, powered by SerpApi',
+  },
+  platinum: {
+    tier: 'Platinum Sponsor',
+    name: 'ElevenLabs',
+    url: 'https://elevenlabs.io/',
+    logo: '/brand/elevenlabs-logo-white.svg',
+    width: 694,
+    height: 90,
+  },
+} as const;
+
+export const SPONSOR_TIER_SHEET_URL =
+  'https://drive.google.com/file/d/14MeobzzVha0luoRpQjlkobB8TLWZ7YjC/view';
+export const SPONSOR_CONTACT = 'stefano.casafrancalaos@austincc.edu';
 
 export const SPACE_APPS_URL = 'https://www.spaceappschallenge.org/';
 
@@ -41,7 +129,7 @@ export const EVENT = {
     building: 'Building 1000',
     street: '1212 Rio Grande St',
     cityStateZip: 'Austin, TX 78701',
-    note: '200 seats · applications reviewed',
+    note: 'Registration closed · all 200 seats filled',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Austin+Community+College+Rio+Grande+Campus+1212+Rio+Grande+St+Austin+TX+78701',
   },
@@ -60,7 +148,7 @@ export const EVENT = {
 
 // --- Hero stat bar (event flyer) -------------------------------------------
 export const STATS = [
-  { value: '200', label: 'Seats', accent: 'ink' },
+  { value: '200', label: 'Seats filled', accent: 'ink' },
   { value: '$10,000', label: 'In prizes', accent: 'gold' },
   { value: 'Free', label: 'To enter', accent: 'cyan' },
   { value: 'All', label: 'Skill levels', accent: 'violet' },
@@ -145,12 +233,12 @@ export const TIMELINE = [
 export const STEPS = [
   {
     n: 1,
-    text: 'Apply on Luma — we’ll confirm your seat.',
-    link: { href: REGISTER_URL, label: 'Apply on Luma' },
+    text: 'Registration on Luma is closed: all 200 seats are filled.',
+    link: null,
   },
   {
     n: 2,
-    text: 'Once approved, register at spaceappschallenge.org and choose Austin.',
+    text: 'Registered? Also register at spaceappschallenge.org and choose Austin.',
     link: { href: SPACE_APPS_AUSTIN_URL, label: 'spaceappschallenge.org' },
   },
   {
@@ -168,17 +256,21 @@ export const SPONSOR_AUDIENCE = [
   { value: 'K–12', label: 'Middle & high schools in Central Austin' },
 ] as const;
 
+// Tiers still open. Title (SerpApi) and Platinum (ElevenLabs) are secured and
+// shown as logos in SPONSORS above. Ordered largest first.
 export const TIERS = [
   {
-    id: 'startup',
-    name: 'Startup Supporter',
-    price: '< $1,000',
-    accent: 'pink',
-    icon: '🚀',
-    status: null,
+    id: 'gold',
+    name: 'Gold Sponsor',
+    price: '$5,000',
+    accent: 'gold',
+    icon: '🏆',
+    status: { label: 'Available', tone: 'open' },
     benefits: [
-      'Logo on the event site and welcome packet',
-      'Shout-out across our social channels',
+      '30-minute workshop or tech talk on the schedule',
+      'Logo on the main stage and winners’ backdrop',
+      'Logo on every participant’s certificate',
+      'Plus everything in Silver',
     ],
   },
   {
@@ -187,56 +279,24 @@ export const TIERS = [
     price: '$2,500',
     accent: 'cyan',
     icon: '🥈',
-    status: null,
+    status: { label: 'Available', tone: 'open' },
     benefits: [
-      'Everything in Startup Supporter',
-      'Logo on the participant T-shirts and stickers',
+      'Logo on participant T-shirts and stickers',
       'Two minutes on the main stage at opening',
-      'Sponsor table, both days',
+      'A sponsor table, both days',
+      'Plus everything in Startup Supporter',
     ],
   },
   {
-    id: 'gold',
-    name: 'Gold Sponsor',
-    price: '$5,000',
-    accent: 'gold',
-    icon: '🏆',
-    status: null,
+    id: 'startup',
+    name: 'Startup Supporter',
+    price: 'Under $1,000',
+    accent: 'pink',
+    icon: '🚀',
+    status: { label: 'Available', tone: 'open' },
     benefits: [
-      'Everything in Silver',
-      '30-minute workshop or tech talk on the schedule',
-      'Logo on main-stage and winners’ backdrop',
-      'Logo on every participant’s certificate',
-    ],
-  },
-  {
-    id: 'platinum',
-    name: 'Platinum Sponsor',
-    price: '$10,000',
-    accent: 'violet',
-    icon: '🎖️',
-    status: { label: '2 available', tone: 'open' },
-    benefits: [
-      'Everything in Gold',
-      'One seat on the judging panel for final pitches',
-      'Your own named challenge track, your brief',
-      'Your API credits in all 200 builders’ hands',
-      'Post-event: opt-in résumé book + build report',
-    ],
-  },
-  {
-    id: 'title',
-    name: 'Title Partner',
-    price: '$15,000+',
-    accent: 'ink',
-    icon: '⭐',
-    status: { label: 'Secured · 1 of 1 · SerpApi', tone: 'taken' },
-    benefits: [
-      'Everything in Platinum',
-      'Two tables, two workshops, two judges’ seats',
-      'Naming rights: “RiverHacks, powered by SerpApi”',
-      'Opening-deck slot to introduce your tool',
-      'First option to renew for 2027',
+      'Logo on the event site and welcome packet',
+      'Social media shout-out',
     ],
   },
 ] as const;
@@ -279,5 +339,5 @@ export const CREDITS = [
 export const SEO = {
   title: 'RiverHacks 2026 — Austin’s NASA Space Apps Challenge',
   description:
-    'Nov 14–15, 2026 · Austin, TX. 200 seats, $10,000 in prizes, free to enter, all skill levels. One weekend, one project, two competitions.',
+    'Nov 14–15, 2026 · Austin, TX. Registration is closed: all 200 seats are filled. $10,000 in prizes, all skill levels. One weekend, one project, two competitions.',
 } as const;

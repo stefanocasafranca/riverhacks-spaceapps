@@ -9,6 +9,15 @@ import Preloader from '../components/Preloader.astro';
 import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
+interface Props {
+  // false on text pages (e.g. /legal): no launch preloader, no three.js scene,
+  // just the CSS starfield so the page reads instantly.
+  scene?: boolean;
+  title?: string;
+  description?: string;
+}
+const { scene = true, title = SEO.title, description = SEO.description } = Astro.props;
+
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL('/og.jpg', Astro.site).href;
 
@@ -40,7 +49,7 @@ const jsonLd = {
     '@type': 'Offer',
     price: '0',
     priceCurrency: 'USD',
-    availability: 'https://schema.org/LimitedAvailability',
+    availability: 'https://schema.org/SoldOut',
     url: REGISTER_URL,
     validFrom: '2026-08-26T00:00:00-05:00',
   },
@@ -53,8 +62,8 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{SEO.title}</title>
-    <meta name="description" content={SEO.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#000b24" />
 
@@ -64,16 +73,16 @@ const jsonLd = {
     <link rel="preload" as="font" type="font/woff2" href={interLatin} crossorigin />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={SEO.title} />
-    <meta property="og:description" content={SEO.description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={SEO.title} />
-    <meta name="twitter:description" content={SEO.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
-    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {scene && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
 
   <body>
@@ -88,18 +97,22 @@ const jsonLd = {
       once three.js has produced a real frame, so a failed or skipped 3D load
       leaves a finished-looking starfield rather than a black rectangle.
     -->
-    <Preloader />
+    {scene && <Preloader />}
 
     <div id="css-stars" aria-hidden="true"></div>
 
-    <canvas id="space-canvas" aria-hidden="true" data-ready="false"></canvas>
+    {scene && <canvas id="space-canvas" aria-hidden="true" data-ready="false"></canvas>}
 
     <div id="page">
       <slot />
     </div>
 
-    <script>
-      import '../three/boot';
-    </script>
+    {
+      scene && (
+        <script>
+          import '../three/boot';
+        </script>
+      )
+    }
   </body>
 </html>

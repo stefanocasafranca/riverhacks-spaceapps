@@ -1,5 +1,6 @@
 ---
-import { EVENT, REGISTER_URL, STATS } from '../data/event';
+import { EVENT, STATS } from '../data/event';
+import RegistrationClosed from './RegistrationClosed.astro';
 ---
 
 <section
@@ -23,19 +24,12 @@ import { EVENT, REGISTER_URL, STATS } from '../data/event';
       <span class="block text-cyan">Two competitions.</span>
     </h1>
 
-    <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-      <a
-        href={REGISTER_URL}
-        target="_blank"
-        rel="noopener"
-        class="group inline-flex items-center justify-center gap-2 rounded-full bg-cyan px-7 py-4 text-base font-semibold text-space transition hover:bg-cyan-hi focus-visible:bg-cyan-hi sm:text-[1.0625rem]"
-      >
-        Register to hack
-        <span
-          aria-hidden="true"
-          class="transition-transform group-hover:translate-x-0.5">&rarr;</span
-        >
-      </a>
+    <!-- Registration closed: replaces the former "Register to hack" Luma CTA. -->
+    <div class="mt-8">
+      <RegistrationClosed />
+    </div>
+
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
       <a
         href="#sponsor"
         class="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-4 text-base font-semibold text-ink transition hover:border-cyan hover:text-cyan sm:text-[1.0625rem]"

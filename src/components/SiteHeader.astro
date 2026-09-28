@@ -1,6 +1,30 @@
 ---
-import { EVENT } from '../data/event';
+import { EVENT, MINORS_NOTICE, LEGAL_MINORS_HREF } from '../data/event';
+
+// Absolute ("/#tracks") so the same nav works from /legal as well as home.
+const NAV = [
+  { href: '/#tracks', label: 'Tracks' },
+  { href: '/#prizes', label: 'Prizes' },
+  { href: '/#participate', label: 'Participate' },
+  { href: '/#sponsor', label: 'Sponsors' },
+  { href: '/legal', label: 'Legal' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
+
+<!--
+  Minors notice. Sits above the sticky header (not inside it) so it is the first
+  thing on every page, mobile and desktop, without permanently eating sticky
+  height once the visitor scrolls. A real link, never auto-dismissed.
+-->
+<div id="minors-notice" class="relative z-30 border-b border-gold/30 bg-space-2">
+  <a
+    href={LEGAL_MINORS_HREF}
+    class="block px-4 py-2.5 text-center text-[0.8125rem] leading-snug font-medium text-ink underline decoration-gold/50 underline-offset-4 transition hover:text-gold hover:decoration-gold sm:px-8 sm:text-[0.875rem]"
+  >
+    <span aria-hidden="true" class="mr-1.5 text-gold">&#9888;</span>{MINORS_NOTICE}
+  </a>
+</div>
 
 <!--
   Page-level sticky header.
@@ -15,6 +39,7 @@ import { EVENT } from '../data/event';
 -->
 <header id="site-header" data-compact="false" class="sticky top-0 z-30">
   <div class="hdr-inner px-4 sm:px-8 lg:px-12">
+    <div class="hdr-top">
     <div class="hdr-logos">
       <img
         src="/brand/riverhacks.webp"
@@ -45,6 +70,21 @@ import { EVENT } from '../data/event';
       />
     </div>
 
+    <nav aria-label="Main" class="hdr-nav hdr-nav-lg">
+      <ul>
+        {
+          NAV.map((n) => (
+            <li>
+              <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    </div>
+
     <p class="hdr-partner">
       <span>
         Powered by{' '}
@@ -59,6 +99,21 @@ import { EVENT } from '../data/event';
       <span aria-hidden="true" class="hdr-dot">·</span>
       <span class="hdr-blurb">{EVENT.titlePartner.blurb}</span>
     </p>
+
+    <!-- Same nav for phones and tablets, as one short line under the credit. -->
+    <nav aria-label="Main" class="hdr-nav hdr-nav-sm">
+      <ul>
+        {
+          NAV.map((n) => (
+            <li>
+              <a href={n.href} aria-current={path === n.href ? 'page' : undefined}>
+                {n.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
   </div>
 </header>
 
@@ -128,6 +183,69 @@ import { EVENT } from '../data/event';
     height: 0.85rem;
   }
 
+  .hdr-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+  .hdr-top > .hdr-logos {
+    flex: 1 1 auto;
+  }
+
+  .hdr-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .hdr-nav a {
+    font-family: var(--font-display);
+    font-variation-settings: 'wdth' 100, 'wght' 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.75rem;
+    color: var(--color-ink-2);
+    text-decoration: none;
+    padding-block: 0.35rem;
+    display: inline-block;
+    transition: color 160ms ease;
+  }
+  .hdr-nav a:hover,
+  .hdr-nav a[aria-current='page'] {
+    color: var(--color-cyan);
+  }
+  .hdr-nav-lg {
+    display: none;
+  }
+  .hdr-nav-sm {
+    margin-top: 0.35rem;
+  }
+  .hdr-nav-sm ul {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .hdr-nav-sm a {
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+  }
+  @media (min-width: 640px) {
+    .hdr-nav-sm ul {
+      justify-content: flex-start;
+      gap: 1.25rem;
+    }
+    .hdr-nav-sm a {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+    }
+  }
+  #site-header[data-compact='true'] .hdr-nav-sm {
+    display: none;
+  }
+
   .hdr-partner {
     margin: 0.6rem 0 0;
     display: flex;
@@ -186,6 +304,15 @@ import { EVENT } from '../data/event';
   }
 
   @media (min-width: 1024px) {
+    .hdr-top > .hdr-logos {
+      flex: 0 1 auto;
+    }
+    .hdr-nav-lg {
+      display: block;
+    }
+    .hdr-nav-sm {
+      display: none;
+    }
     .hdr-logo {
       height: 4.75rem;
     }

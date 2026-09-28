@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RiverHacks//Guardian Orientation 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:riverhacks-2026-guardian-orientation-oct16@riverhacks-spaceapps.org
+DTSTAMP:20260928T000000Z
+DTSTART:20261017T000000Z
+DTEND:20261017T004500Z
+SUMMARY:RiverHacks guardian orientation (required)
+DESCRIPTION:Required to participate in RiverHacks 2026 for participants und
+ er 18. Parents and guardians attend one session\, participants are strongl
+ y recommended to join them. Google Meet: https://meet.google.com/akp-uzww-
+ hsp Details: https://riverhacks-spaceapps.org/legal#orientation
+LOCATION:https://meet.google.com/akp-uzww-hsp
+URL:https://meet.google.com/akp-uzww-hsp
+END:VEVENT
+END:VCALENDAR

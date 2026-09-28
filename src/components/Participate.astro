@@ -1,6 +1,7 @@
 ---
 import Section from './Section.astro';
-import { STEPS, TIMELINE, REGISTER_URL } from '../data/event';
+import { STEPS, TIMELINE } from '../data/event';
+import RegistrationClosed from './RegistrationClosed.astro';
 ---
 
 <Section
@@ -80,18 +81,8 @@ import { STEPS, TIMELINE, REGISTER_URL } from '../data/event';
     </div>
   </div>
 
-  <div class="mt-8 text-center">
-    <a
-      href={REGISTER_URL}
-      target="_blank"
-      rel="noopener"
-      class="group inline-flex items-center justify-center gap-2 rounded-full bg-cyan px-8 py-4 text-base font-semibold text-space transition hover:bg-cyan-hi sm:text-[1.0625rem]"
-    >
-      Apply for a seat
-      <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5"
-        >&rarr;</span
-      >
-    </a>
-    <p class="mt-3 text-[0.8125rem] text-ink-3">200 seats · applications reviewed · free to enter</p>
+  <!-- Registration closed: replaces the former "Apply for a seat" Luma CTA. -->
+  <div class="panel mt-8 rounded-3xl px-6 py-8">
+    <RegistrationClosed align="center" />
   </div>
 </Section>

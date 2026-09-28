@@ -1,6 +1,7 @@
 ---
 import Section from './Section.astro';
-import { EVENT, REGISTER_URL } from '../data/event';
+import { EVENT } from '../data/event';
+import RegistrationClosed from './RegistrationClosed.astro';
 ---
 
 <Section chapter="mars" id="venue" eyebrow="Save the date" title="Austin, Texas" accent="pink">
@@ -35,21 +36,10 @@ import { EVENT, REGISTER_URL } from '../data/event';
     </address>
   </div>
 
+  <!-- Registration closed: replaces "Seats are limited to 200" + "Register on Luma". -->
   <div
-    class="mt-5 flex flex-col items-center gap-4 rounded-3xl border border-cyan/25 bg-gradient-to-r from-cyan/10 to-violet/10 px-6 py-8 text-center sm:flex-row sm:justify-between sm:text-left"
+    class="mt-5 rounded-3xl border border-cyan/25 bg-gradient-to-r from-cyan/10 to-violet/10 px-6 py-8"
   >
-    <div>
-      <p class="display text-[clamp(1.25rem,5vw,1.9rem)]">Seats are limited to 200.</p>
-      <p class="mt-1.5 text-[0.9375rem] text-ink-2">Applications are reviewed as they come in.</p>
-    </div>
-    <a
-      href={REGISTER_URL}
-      target="_blank"
-      rel="noopener"
-      class="group inline-flex shrink-0 items-center gap-2 rounded-full bg-cyan px-7 py-4 text-base font-semibold text-space transition hover:bg-cyan-hi"
-    >
-      Register on Luma
-      <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
-    </a>
+    <RegistrationClosed align="center" />
   </div>
 </Section>

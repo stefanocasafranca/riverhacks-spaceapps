@@ -1,0 +1,36 @@
+---
+import { REGISTRATION, SPACE_APPS_URL } from '../data/event';
+
+interface Props {
+  align?: 'left' | 'center';
+  size?: 'lg' | 'md';
+}
+const { align = 'left', size = 'md' } = Astro.props;
+const link =
+  'font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan';
+---
+
+<div class:list={[align === 'center' && 'text-center']}>
+  <p
+    class:list={[
+      'display',
+      size === 'lg' ? 'text-[clamp(1.5rem,6.4vw,2.5rem)]' : 'text-[clamp(1.25rem,5vw,1.9rem)]',
+    ]}
+  >
+    <span class="text-pink">{REGISTRATION.closed}</span>
+    <span class="block text-ink">{REGISTRATION.full}</span>
+  </p>
+  <ul
+    class:list={[
+      'mt-4 space-y-2 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base',
+      align === 'center' && 'mx-auto max-w-xl',
+    ]}
+  >
+    <li>
+      {REGISTRATION.spaceApps}{' '}
+      <a href={SPACE_APPS_URL} target="_blank" rel="noopener" class={link}>
+        spaceappschallenge.org
+      </a>
+    </li>
+  </ul>
+</div>

@@ -1,6 +1,14 @@
 ---
 import Section from './Section.astro';
-import { TIERS, SPONSOR_AUDIENCE, SPONSOR_CLOSER, EVENT } from '../data/event';
+import {
+  TIERS,
+  SPONSOR_AUDIENCE,
+  SPONSOR_CLOSER,
+  EVENT,
+  SPONSORS,
+  SPONSOR_TIER_SHEET_URL,
+  SPONSOR_CONTACT,
+} from '../data/event';
 
 // Accent → utility map. Kept explicit rather than interpolated so Tailwind's
 // scanner can see every class name it needs to emit.
@@ -31,7 +39,7 @@ const glow: Record<string, string> = {
   chapter="mars"
   id="sponsor"
   eyebrow="Partner with us"
-  title="Sponsor<br />RiverHacks"
+  title="Sponsors"
   accent="violet"
   wide
 >
@@ -39,6 +47,52 @@ const glow: Record<string, string> = {
     {EVENT.sponsorTagline} Put your tools in 200 builders' hands for a weekend, and your
     name on the work that comes out of it.
   </p>
+
+  <!-- Secured sponsors. Title is the largest mark on the page section,
+       Platinum next, the open tiers below are smaller still. Official
+       white-on-dark logo files, served locally from /public/brand. -->
+  <div class="mb-12 grid gap-4">
+    <a
+      href={SPONSORS.title.url}
+      target="_blank"
+      rel="noopener"
+      class="panel group relative block overflow-hidden rounded-3xl border-white/30 px-6 py-10 text-center transition hover:border-cyan/60 sm:px-10 sm:py-14"
+    >
+      <div aria-hidden="true" class="pointer-events-none absolute -top-24 left-1/2 h-56 w-72 -translate-x-1/2 rounded-full bg-cyan/15 blur-3xl"></div>
+      <p class="eyebrow relative text-cyan">{SPONSORS.title.tier}</p>
+      <img
+        src={SPONSORS.title.logo}
+        alt={SPONSORS.title.name}
+        width={SPONSORS.title.width}
+        height={SPONSORS.title.height}
+        loading="lazy"
+        decoding="async"
+        class="relative mx-auto mt-6 h-auto w-[min(78%,26rem)]"
+      />
+      <p class="relative mt-6 text-[0.9375rem] text-ink-2 sm:text-base">
+        {SPONSORS.title.credit}
+      </p>
+    </a>
+
+    <a
+      href={SPONSORS.platinum.url}
+      target="_blank"
+      rel="noopener"
+      class="panel group relative block overflow-hidden rounded-3xl border-violet/45 px-6 py-8 text-center transition hover:border-violet sm:px-10 sm:py-10"
+    >
+      <div aria-hidden="true" class="pointer-events-none absolute -top-20 left-1/2 h-44 w-60 -translate-x-1/2 rounded-full bg-violet/20 blur-3xl"></div>
+      <p class="eyebrow relative text-violet">{SPONSORS.platinum.tier}</p>
+      <img
+        src={SPONSORS.platinum.logo}
+        alt={SPONSORS.platinum.name}
+        width={SPONSORS.platinum.width}
+        height={SPONSORS.platinum.height}
+        loading="lazy"
+        decoding="async"
+        class="relative mx-auto mt-5 h-auto w-[min(70%,18rem)]"
+      />
+    </a>
+  </div>
 
   <!-- Who's in the room -->
   <dl class="panel mb-10 grid grid-cols-2 gap-y-6 rounded-2xl px-2 py-6 sm:grid-cols-4 sm:px-4">
@@ -63,18 +117,19 @@ const glow: Record<string, string> = {
     }
   </dl>
 
+  <h3 class="display mb-2 text-[clamp(1.5rem,6vw,2.25rem)]">Available tiers</h3>
+  <p class="mb-6 text-[0.9375rem] text-ink-2">Three ways to put your name on the weekend.</p>
   <p class="eyebrow mb-4 text-ink-3 md:hidden">Swipe through the tiers &rarr;</p>
 
   <!-- items-start, not stretch: equal heights would pad the two-bullet Startup
        card out to the five-bullet Title Partner card's height on mobile. -->
-  <ul class="rail items-start">
+  <ul class="rail tiers-3 items-start">
     {
       TIERS.map((t) => (
         <li
           class:list={[
-            'panel relative flex flex-col overflow-hidden rounded-3xl p-6 md:flex-row md:items-start md:gap-7 md:p-7',
+            'panel relative flex h-full flex-col overflow-hidden rounded-3xl p-6',
             ring[t.accent],
-            t.status?.tone === 'taken' && 'opacity-75',
           ]}
         >
           <div
@@ -87,23 +142,21 @@ const glow: Record<string, string> = {
 
           {/* Name + price. Stacks above the benefits on phone, becomes the
               left column of the flyer's ladder row from md: up. */}
-          <div class="relative md:w-60 md:shrink-0">
+          <div class="relative">
             <span aria-hidden="true" class="text-2xl leading-none">
               {t.icon}
             </span>
-            <h3 class:list={['display mt-3 text-[clamp(1.25rem,5vw,1.6rem)]', text[t.accent]]}>
+            <h4 class:list={['display mt-3 text-[clamp(1.25rem,5vw,1.5rem)]', text[t.accent]]}>
               {t.name}
-            </h3>
-            <p class="display mt-2 text-[clamp(1.6rem,7vw,2.25rem)] text-ink tabular-nums">
+            </h4>
+            <p class="display mt-2 text-[clamp(1.5rem,6vw,1.9rem)] text-ink tabular-nums">
               {t.price}
             </p>
             {t.status && (
               <p
                 class:list={[
                   'eyebrow mt-3 inline-block rounded-full border px-2.5 py-1',
-                  t.status.tone === 'open'
-                    ? 'border-violet/50 text-violet'
-                    : 'border-white/20 text-ink-3',
+                  'border-white/30 text-ink',
                 ]}
               >
                 {t.status.label}
@@ -111,7 +164,7 @@ const glow: Record<string, string> = {
             )}
           </div>
 
-          <ul class="relative mt-6 flex-1 space-y-2.5 border-t border-white/8 pt-5 md:mt-0 md:border-t-0 md:border-l md:border-white/8 md:pt-1 md:pl-7">
+          <ul class="relative mt-6 flex-1 space-y-2.5 border-t border-white/8 pt-5">
             {t.benefits.map((b) => (
               <li class="flex gap-2.5 text-[0.875rem] leading-relaxed text-ink-2 sm:text-[0.9375rem]">
                 <span aria-hidden="true" class:list={['mt-[0.45em] h-1 w-1 shrink-0 rounded-full', text[t.accent], 'bg-current']} />
@@ -136,17 +189,23 @@ const glow: Record<string, string> = {
       {SPONSOR_CLOSER.script}
     </p>
 
-    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-      {
-        EVENT.contacts.map((c) => (
-          <a
-            href={`mailto:${c.email}?subject=RiverHacks%202026%20sponsorship`}
-            class="inline-flex items-center justify-center rounded-full border border-violet/40 px-6 py-3.5 text-[0.9375rem] font-medium text-ink transition hover:border-violet hover:text-violet"
-          >
-            {c.email}
-          </a>
-        ))
-      }
+    <h3 class="eyebrow mt-10 text-violet">Become a sponsor</h3>
+    <div class="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
+      <a
+        href={SPONSOR_TIER_SHEET_URL}
+        target="_blank"
+        rel="noopener"
+        class="group inline-flex items-center justify-center gap-2 rounded-full bg-violet px-7 py-3.5 text-[0.9375rem] font-semibold text-space transition hover:bg-white"
+      >
+        View the tier sheet
+        <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
+      </a>
+      <a
+        href={`mailto:${SPONSOR_CONTACT}?subject=RiverHacks%202026%20sponsorship`}
+        class="inline-flex max-w-full items-center justify-center rounded-full border border-violet/40 px-6 py-3.5 text-[0.875rem] font-medium break-all text-ink transition hover:border-violet hover:text-violet sm:text-[0.9375rem]"
+      >
+        {SPONSOR_CONTACT}
+      </a>
     </div>
   </div>
 </Section>

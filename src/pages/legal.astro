@@ -1,0 +1,311 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import Footer from '../components/Footer.astro';
+import {
+  EVENT,
+  REGISTRATION,
+  CONSENT_FORM_URL,
+  WAIVER_URL,
+  FORMS_COMING_SOON,
+  MINORS_DEADLINE,
+  ORIENTATION,
+  SPACE_APPS_AUSTIN_URL,
+  SPACE_APPS_LEGAL_URL,
+  LEGAL_CONTACT,
+  REGISTER_URL,
+} from '../data/event';
+
+// Link out only. This site never collects, uploads, or stores consent forms
+// or waivers. Empty URLs in event.ts render as muted "coming soon" text.
+
+const b = (t: string) => `<strong class="font-semibold text-ink">${t}</strong>`;
+
+// Rule strings may contain <strong> from b(); rendered with set:html (static, trusted text only).
+const MINOR_RULES = [
+  `Age counts on November 14, 2026. If you were born after November 14, 2008, ${b('you are under 18 for this event and these rules apply to you')}.`,
+  'Ages 12-17 can participate and compete for prizes.',
+  `${b('A parent or guardian must stay on campus with you at all times.')} No exceptions, even with a signed waiver.`,
+  'One guardian can cover up to 6 participants (one team).',
+  `${b('All participants under 18 leave at 5:00 PM on Saturday, November 14')}, and keep building from home. ${b('The overnight session is for participants 18 and older only.')}`,
+  `Your parent or guardian must sign the consent form by ${b(MINORS_DEADLINE)}. ${b('It is required to participate.')}`,
+  `${b('Parents and guardians must attend one of the required Google Meet orientation sessions')} by ${b(MINORS_DEADLINE)}: Friday, October 16, 2026, 7:00 to 7:45 PM CT, or Saturday, October 17, 2026, 10:30 to 11:15 AM CT. ${b('It is required to participate.')} We strongly recommend that you attend with them.`,
+  `At check-in, a volunteer matches your signed form to you. ${b('Forms are not accepted on site')}, so anyone without a form signed in advance cannot enter.`,
+];
+
+const CONDUCT = [
+  'Treat everyone with respect. Harassment, discrimination, bullying, and threats are not tolerated, in person or online, including on Discord.',
+  'Follow instructions from organizers, volunteers, ACC staff, and ACC police at all times.',
+  'Follow all Austin Community College policies and campus rules. Alcohol, drugs, and weapons are prohibited.',
+  'Stay in the areas assigned to the event. Do not prop open doors or enter restricted areas.',
+  'Participants under 18 must stay with their approved guardian at all times and leave at 5:00 PM on Saturday, November 14.',
+  'Build your own work and follow the NASA Space Apps rules. Do not attack, disrupt, or access networks, devices, or accounts without permission.',
+  'You are responsible for your own belongings.',
+];
+
+const LIABILITY = [
+  'Participation in RiverHacks is voluntary and at your own risk.',
+  'To the fullest extent permitted by law, each participant, and the parent or guardian of each participant under 18, releases and agrees not to hold liable the RiverHacks organizers, volunteers, mentors, judges, sponsors, ACM at ACC, and Austin Community College District and its trustees, employees, and police, for any injury, illness, loss, theft, or damage to people or property arising from participation in RiverHacks, except as caused by gross negligence or willful misconduct.',
+  'Parents and guardians are solely responsible for supervising participants under 18 throughout the event. Organizers and volunteers do not supervise minors.',
+  "In a medical emergency, organizers may call 911 on a participant's behalf. Any resulting costs are the participant's or guardian's responsibility.",
+  "The check-in desk is recorded on camera and guardian orientation sessions are recorded, to keep a record of each guardian's approval.",
+  'The signed RiverHacks Participant Waiver is the governing agreement. If anything on this page conflicts with the signed waiver, the signed waiver controls.',
+];
+
+const link =
+  'font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan';
+// Disabled-looking pill for forms that are not published yet. Not a link.
+const soon =
+  'mt-3 inline-block cursor-not-allowed rounded-2xl border border-dashed border-white/20 bg-white/5 px-4 py-2.5 text-[0.875rem] leading-snug text-ink-3';
+const btn =
+  'inline-flex items-center justify-center gap-2 rounded-full border border-cyan/40 px-4 py-2.5 text-[0.875rem] font-semibold text-ink transition hover:border-cyan hover:text-cyan';
+const dot = 'mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full';
+const bullet = 'flex gap-3 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base';
+const stepNum =
+  'display grid h-8 w-8 shrink-0 place-items-center rounded-full border border-cyan/40 text-sm text-cyan';
+---
+
+<Base
+  scene={false}
+  title="Legal · RiverHacks 2026"
+  description="Rules for participants under 18, guardian orientation, the code of conduct, and the terms every RiverHacks 2026 participant agrees to."
+>
+  <SiteHeader />
+
+  <main id="main" class="relative px-5 pt-10 pb-20 sm:px-8 sm:pt-16 lg:px-12">
+    <div class="mx-auto max-w-3xl">
+      <header class="scrim-text mb-12">
+        <p class="eyebrow mb-4 text-cyan">RiverHacks 2026</p>
+        <h1 class="display text-[clamp(2.5rem,11vw,4.5rem)]">Legal</h1>
+        <p class="mt-5 text-[0.975rem] leading-relaxed text-ink-2 sm:text-lg">
+          {EVENT.dates.label} at {EVENT.venue.name}. Read this before the event.
+        </p>
+      </header>
+
+      <!-- ===== Participants under 18 ===== -->
+      <section id="minors" aria-labelledby="minors-h" class="panel rounded-3xl p-6 sm:p-9">
+        <p class="eyebrow text-gold">Read first</p>
+        <h2 id="minors-h" class="display mt-3 text-[clamp(1.75rem,7.5vw,2.75rem)]">
+          Participants under 18
+        </h2>
+
+        <ul class="mt-7 space-y-3.5">
+          {
+            MINOR_RULES.map((r) => (
+              <li class={bullet}>
+                <span aria-hidden="true" class:list={[dot, 'bg-gold']} />
+                <span set:html={r} />
+              </li>
+            ))
+          }
+        </ul>
+
+        <p class="mt-6 text-[0.875rem] leading-relaxed text-ink-3 sm:text-[0.9375rem]">
+          Orientation sessions are recorded, and the check-in desk on event day is recorded on camera,
+          so we have a record of each guardian's approval.
+        </p>
+
+        <div id="minors-elementary" class="mt-8 rounded-2xl border border-pink/35 bg-pink/5 p-5 sm:p-6">
+          <h3 class="eyebrow text-pink">Ages 11 and under</h3>
+          <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+            Born after November 14, 2014: Saturday-only elementary activation, 9:00 AM to 12:00 PM,
+            with a parent or guardian present. Limited to 30 kids. Not eligible for prizes and cannot
+            stay past noon.
+          </p>
+        </div>
+
+        <h3 id="minors-steps" class="display mt-10 text-[clamp(1.35rem,5.5vw,1.9rem)] text-cyan">
+          Steps
+        </h3>
+        <ol class="mt-5 divide-y divide-white/8">
+          <li class="flex gap-4 py-5 first:pt-0">
+            <span aria-hidden="true" class={stepNum}>1</span>
+            <div class="pt-1 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+              <p>
+                Register on <a href={REGISTER_URL} target="_blank" rel="noopener" class={link}>Luma</a> and
+                at <a href={SPACE_APPS_AUSTIN_URL} target="_blank" rel="noopener" class={link}>spaceappschallenge.org</a>{' '}
+                (choose Austin, Texas).
+              </p>
+              <p class="mt-2 text-[0.875rem] text-ink-3">
+                Note: {REGISTRATION.closed} {REGISTRATION.full}
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-4 py-5">
+            <span aria-hidden="true" class={stepNum}>2</span>
+            <div class="pt-1 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+              <p>
+                Parent or guardian signs the consent form by{' '}
+                <strong class="text-ink">{MINORS_DEADLINE}</strong>. It is required to participate.
+              </p>
+              {
+                CONSENT_FORM_URL ? (
+                  <a href={CONSENT_FORM_URL} target="_blank" rel="noopener" class:list={[btn, 'mt-3']}>
+                    Open the consent form <span aria-hidden="true">&rarr;</span>
+                  </a>
+                ) : (
+                  <p class={soon} aria-disabled="true">
+                    Consent form: {FORMS_COMING_SOON}
+                  </p>
+                )
+              }
+            </div>
+          </li>
+          <li class="flex gap-4 py-5">
+            <span aria-hidden="true" class={stepNum}>3</span>
+            <p class="pt-1 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+              <strong class="font-semibold text-ink">Parent or guardian attends one Google Meet orientation session</strong> by{' '}
+              <strong class="text-ink">{MINORS_DEADLINE}</strong>: Friday, October 16, 2026, 7:00 to
+              7:45 PM CT, or Saturday, October 17, 2026, 10:30 to 11:15 AM CT.{' '}
+              <strong class="font-semibold text-ink">It is required to participate.</strong> At the session we
+              confirm which participants each guardian is approved to supervise. We strongly recommend
+              that participants attend with their guardian.{' '}
+              <a href="#orientation" class={link}>Meet links and calendar invites</a>
+            </p>
+          </li>
+          <li class="flex gap-4 py-5 last:pb-0">
+            <span aria-hidden="true" class={stepNum}>4</span>
+            <p class="pt-1 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+              Arrive with your parent or guardian on Saturday, November 14, 9:00 AM, ACC Rio Grande
+              Campus, Building 1000, 1212 Rio Grande St, Austin TX 78701.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <!-- ===== Guardian orientation ===== -->
+      <section id="orientation" aria-labelledby="orientation-h" class="panel mt-6 rounded-3xl p-6 sm:p-9">
+        <p class="eyebrow text-gold">Required for under 18</p>
+        <h2 id="orientation-h" class="display mt-3 text-[clamp(1.75rem,7.5vw,2.75rem)]">
+          Guardian orientation
+        </h2>
+        <p class="mt-5 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+          On Google Meet.{' '}
+          <strong class="font-semibold text-ink">Parents and guardians must attend one of the required sessions by {MINORS_DEADLINE}.</strong>{' '}
+          We strongly recommend that participants attend with them.
+        </p>
+
+        <ul class="mt-7 divide-y divide-white/8">
+          {
+            ORIENTATION.sessions.map((s) => (
+              <li class="flex flex-col gap-3 py-5 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between">
+                <p class="text-[0.9375rem] font-medium text-ink sm:text-base">{s.label}</p>
+                <div class="flex flex-wrap gap-2">
+                  <a href={s.meet} target="_blank" rel="noopener" class:list={[btn, 'border-cyan bg-cyan text-space hover:bg-cyan-hi hover:text-space']}>
+                    Join on Google Meet <span aria-hidden="true">&rarr;</span>
+                  </a>
+                  <a href={s.google} target="_blank" rel="noopener" class={btn}>
+                    Google Calendar
+                  </a>
+                  <a href={s.ics} download class={btn}>
+                    Apple / Outlook (.ics)
+                  </a>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- ===== All participants ===== -->
+      <section id="all" aria-labelledby="all-h" class="panel mt-6 rounded-3xl p-6 sm:p-9">
+        <h2 id="all-h" class="display text-[clamp(1.75rem,7.5vw,2.75rem)]">All participants</h2>
+        <ul class="mt-7 space-y-3.5">
+          <li class={bullet}>
+            <span aria-hidden="true" class:list={[dot, 'bg-cyan']}></span>
+            <span>
+              {
+                WAIVER_URL ? (
+                  <>
+                    <strong class="font-semibold text-ink">Everyone must sign the RiverHacks Participant Waiver before the event.</strong>{' '}
+                    <a href={WAIVER_URL} target="_blank" rel="noopener" class={link}>
+                      Sign the waiver
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <strong class="font-semibold text-ink">Everyone must sign the RiverHacks Participant Waiver before the event</strong>{' '}
+                    <span class="text-ink-3" aria-disabled="true">
+                      (coming soon, available by October 5, 2026). We are finalizing it with
+                      ACC.</span
+                    >
+                  </>
+                )
+              }
+            </span>
+          </li>
+          <li class={bullet}>
+            <span aria-hidden="true" class:list={[dot, 'bg-cyan']}></span>
+            <span>
+              NASA Space Apps terms apply:{' '}
+              <a href={SPACE_APPS_LEGAL_URL} target="_blank" rel="noopener" class:list={[link, 'break-all']}>
+                spaceappschallenge.org/legal
+              </a>
+            </span>
+          </li>
+          <li class={bullet}>
+            <span aria-hidden="true" class:list={[dot, 'bg-cyan']}></span>
+            <span>
+              Follow the <a href="#code-of-conduct" class={link}>RiverHacks code of conduct</a> and ACC
+              campus rules.
+            </span>
+          </li>
+          <li class={bullet}>
+            <span aria-hidden="true" class:list={[dot, 'bg-cyan']}></span>
+            <span>
+              Questions:{' '}
+              <a href={`mailto:${LEGAL_CONTACT}`} class:list={[link, 'break-all']}>{LEGAL_CONTACT}</a>
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ===== Code of conduct + participation and liability ===== -->
+      <section id="code-of-conduct" aria-labelledby="coc-h" class="panel mt-6 rounded-3xl p-6 sm:p-9">
+        <h3 id="coc-h" class="display text-[clamp(1.75rem,7.5vw,2.75rem)]">Code of Conduct</h3>
+        <p class="mt-5 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+          RiverHacks is a space for everyone to learn and build. By registering for or attending
+          RiverHacks 2026, you agree to this Code of Conduct.
+        </p>
+        <ul class="mt-6 space-y-3.5">
+          {
+            CONDUCT.map((c) => (
+              <li class={bullet}>
+                <span aria-hidden="true" class:list={[dot, 'bg-violet']} />
+                <span>{c}</span>
+              </li>
+            ))
+          }
+          <li class={bullet}>
+            <span aria-hidden="true" class:list={[dot, 'bg-violet']}></span>
+            <span>
+              To report a concern, tell any organizer or volunteer, or email{' '}
+              <a href={`mailto:${LEGAL_CONTACT}`} class:list={[link, 'break-all']}>{LEGAL_CONTACT}</a>.
+              In an emergency, call 911.
+            </span>
+          </li>
+        </ul>
+        <p class="mt-6 text-[0.9375rem] leading-relaxed text-ink sm:text-base">
+          Anyone who breaks this Code of Conduct may be removed from the event without warning, may be
+          disqualified from prizes, and may be reported to ACC or law enforcement.
+        </p>
+
+        <h3 id="liability" class="display mt-12 text-[clamp(1.5rem,6.5vw,2.25rem)]">
+          Participation and Liability
+        </h3>
+        <ul class="mt-6 space-y-3.5">
+          {
+            LIABILITY.map((c) => (
+              <li class={bullet}>
+                <span aria-hidden="true" class:list={[dot, 'bg-violet']} />
+                <span>{c}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <Footer />
+</Base>
