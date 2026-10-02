@@ -1,5 +1,5 @@
 ---
-import { REGISTRATION, SPACE_APPS_URL } from '../data/event';
+import { REGISTRATION, SPACE_APPS_URL, WAITLIST_URL } from '../data/event';
 
 interface Props {
   align?: 'left' | 'center';
@@ -20,6 +20,17 @@ const link =
     <span class="text-pink">{REGISTRATION.closed}</span>
     <span class="block text-ink">{REGISTRATION.full}</span>
   </p>
+  <div class:list={['mt-5', align === 'center' && 'flex flex-col items-center']}>
+    <a
+      href={WAITLIST_URL}
+      target="_blank"
+      rel="noopener"
+      class="btn-aluminium inline-flex items-center justify-center rounded-full px-7 py-4 text-base font-semibold sm:text-[1.0625rem]"
+    >
+      {REGISTRATION.waitlistCta}
+    </a>
+    <p class="mt-2 text-sm text-ink-2">Only for current ACC students.</p>
+  </div>
   <ul
     class:list={[
       'mt-4 space-y-2 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base',

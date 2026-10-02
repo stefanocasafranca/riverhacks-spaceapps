@@ -5,6 +5,7 @@ import { rocketAltitude, sampleFraming } from './chapters';
 import { createStars, createDust } from './scene/starfield';
 import { createRocket } from './scene/rocket';
 import { loadStarship, type Starship } from './scene/starship';
+import { createSteelEnvironment } from './scene/steel';
 import { createPlume } from './scene/plume';
 import { createPlanets } from './scene/planets';
 
@@ -75,9 +76,10 @@ export async function start(
   // The Starship GLB is the largest asset on the page, so it drives the bulk of
   // the loading bar. If it fails for any reason — offline, 404, decoder problem
   // — fall back to the procedural stack rather than a page with no vehicle.
+  const steelEnv = createSteelEnvironment(renderer);
   let vehicle: Starship | ReturnType<typeof createRocket>;
   try {
-    vehicle = await loadStarship(tier, (f) => report(0.12 + f * 0.7));
+    vehicle = await loadStarship(tier, (f) => report(0.12 + f * 0.7), steelEnv);
   } catch {
     vehicle = createRocket();
   }
@@ -240,6 +242,7 @@ export async function start(
     stars.dispose();
     dust.dispose();
     vehicle.dispose();
+    steelEnv.dispose();
     plume.dispose();
     planets.dispose();
     renderer.dispose();

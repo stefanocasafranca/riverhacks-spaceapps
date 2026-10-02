@@ -18,7 +18,12 @@ export const REGISTRATION = {
   closed: 'Registration is closed.',
   full: 'All 200 seats are filled.',
   spaceApps: 'Anyone can still join NASA Space Apps online.',
+  waitlist: 'ACC students: join the waitlist and we will contact you as seats open.',
+  waitlistCta: 'Join the ACC student waitlist',
 } as const;
+
+// Google Form for the ACC-student waitlist (opened after Luma filled up).
+export const WAITLIST_URL = 'https://forms.gle/C9gL4xihfYZzbvN88';
 
 // --- Legal / minors ---------------------------------------------------------
 // Filling a URL below swaps the public "coming soon" text for a real link.
@@ -129,7 +134,7 @@ export const EVENT = {
     building: 'Building 1000',
     street: '1212 Rio Grande St',
     cityStateZip: 'Austin, TX 78701',
-    note: 'Registration closed · all 200 seats filled',
+    note: 'Registration closed · ACC student waitlist open',
     mapUrl:
       'https://www.google.com/maps/search/?api=1&query=Austin+Community+College+Rio+Grande+Campus+1212+Rio+Grande+St+Austin+TX+78701',
   },
@@ -233,8 +238,8 @@ export const TIMELINE = [
 export const STEPS = [
   {
     n: 1,
-    text: 'Registration on Luma is closed: all 200 seats are filled.',
-    link: null,
+    text: 'Registration on Luma is closed: all 200 seats are filled. ACC students can join the waitlist.',
+    link: { href: WAITLIST_URL, label: 'Join the ACC student waitlist' },
   },
   {
     n: 2,

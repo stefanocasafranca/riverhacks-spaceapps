@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import { softSprite } from './sprite';
+import { createSteelMaterial } from './steel';
 import type { Tier } from '../tiers';
 
 /**
@@ -33,7 +34,12 @@ export interface Starship {
 /** Height the vehicle is normalised to, in world units. */
 const TARGET_HEIGHT = 15;
 
-export async function loadStarship(tier: Tier, onProgress?: (f: number) => void): Promise<Starship> {
+export async function loadStarship(
+  tier: Tier,
+  onProgress?: (f: number) => void,
+  /** Reflection map for the steel hull (see ./steel). */
+  envMap: THREE.Texture | null = null,
+): Promise<Starship> {
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
 
@@ -55,27 +61,18 @@ export async function loadStarship(tier: Tier, onProgress?: (f: number) => void)
 
   // --- Materials -----------------------------------------------------------
   // The source has 23 materials and zero textures — all flat PBR colours, most
-  // of them near-black, which reads as a silhouette against a navy sky. Retint
-  // to a bright hull with the RiverHacks cyan on the accents so the vehicle
-  // stays legible and on-brand.
-  const hull = new THREE.MeshStandardMaterial({
-    color: '#f4f8ff',
-    metalness: 0.42,
-    roughness: 0.44,
-  });
+  // of them near-black. Everything but the engines becomes polished stainless
+  // steel, like the real vehicle on the pad; the engines stay dark.
+  const steel = createSteelMaterial(envMap);
   const dark = new THREE.MeshStandardMaterial({
     color: '#38445e',
     metalness: 0.6,
     roughness: 0.35,
   });
-  const accent = new THREE.MeshStandardMaterial({
-    color: '#24b4f0',
-    metalness: 0.4,
-    roughness: 0.28,
-    emissive: new THREE.Color('#24b4f0'),
-    emissiveIntensity: 0.3,
-  });
-  disposables.push(hull, dark, accent);
+  disposables.push(steel.material, dark);
+
+  // Object-space bounds of the hull, so the shader's panel seams follow it.
+  const hullBounds = new THREE.Box3();
 
   model.traverse((o) => {
     const mesh = o as THREE.Mesh;
@@ -88,16 +85,19 @@ export async function loadStarship(tier: Tier, onProgress?: (f: number) => void)
 
     const name = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material)?.name ?? '';
     const n = name.toLowerCase();
-    mesh.material = n.includes('engine') || n.includes('raptor')
-      ? dark
-      : n.includes('connector') || n.includes('nautico')
-        ? accent
-        : hull;
+    const isEngine = n.includes('engine') || n.includes('raptor');
+    mesh.material = isEngine ? dark : steel.material;
+    if (!isEngine) {
+      mesh.geometry.computeBoundingBox();
+      hullBounds.union(mesh.geometry.boundingBox!);
+    }
 
     mesh.castShadow = false;
     mesh.receiveShadow = false;
     mesh.frustumCulled = false;
   });
+
+  steel.setBounds(hullBounds);
 
   // --- Normalise -----------------------------------------------------------
   // The export bakes geometry into world coordinates with an arbitrary origin
@@ -154,7 +154,6 @@ export async function loadStarship(tier: Tier, onProgress?: (f: number) => void)
       glowMat.opacity = thrust * (0.72 + Math.sin(t * 26) * 0.09 + Math.sin(t * 9.3) * 0.06);
       const flick = 1 + Math.sin(t * 21) * 0.07;
       glow.scale.set(11 * flick * (0.6 + thrust * 0.4), 14 * flick * (0.6 + thrust * 0.4), 1);
-      accent.emissiveIntensity = 0.22 + thrust * 0.5;
 
       // Attitude is scroll-driven, so the vehicle holds its pose when the page
       // is still. (An earlier version used elapsed time here and span forever.)

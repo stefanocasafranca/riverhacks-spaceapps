@@ -339,3 +339,70 @@ html.lenis body {
 #css-stars {
   transition: opacity 700ms ease-out;
 }
+
+/* ---------------------------------------------------------------------------
+   Brushed-aluminium CTA (ACC waitlist). Pure CSS on purpose: a WebGL context
+   per button would be heavy next to the full-page scene and add nothing a
+   few gradients can't. Layers, top to bottom: fine horizontal brush lines,
+   a soft specular band, and the base metal ramp. A bright cyan border keeps
+   the button readable against both the dark field and the metal itself.
+--------------------------------------------------------------------------- */
+@layer components {
+  .btn-aluminium {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    color: var(--color-space);
+    border: 2px solid var(--color-cyan-hi);
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgb(255 255 255 / 0.07) 0 1px,
+        rgb(0 0 0 / 0.045) 1px 2px,
+        transparent 2px 3px
+      ),
+      radial-gradient(120% 70% at 50% 0%, rgb(255 255 255 / 0.85) 0%, transparent 60%),
+      linear-gradient(180deg, #f3f5f8 0%, #cfd4db 42%, #a9b0ba 58%, #dfe3e8 100%);
+    box-shadow:
+      0 0 0 3px rgb(36 180 240 / 0.25),
+      0 0 22px rgb(36 180 240 / 0.35),
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 -1px 0 rgb(0 0 0 / 0.25);
+    text-shadow: 0 1px 0 rgb(255 255 255 / 0.6);
+    transition:
+      box-shadow 0.25s ease,
+      transform 0.25s ease;
+  }
+  /* Light sweep across the metal on hover/focus */
+  .btn-aluminium::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.75) 50%, transparent 65%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+  }
+  .btn-aluminium:hover,
+  .btn-aluminium:focus-visible {
+    box-shadow:
+      0 0 0 3px rgb(127 212 255 / 0.5),
+      0 0 30px rgb(36 180 240 / 0.55),
+      inset 0 1px 0 rgb(255 255 255 / 0.9),
+      inset 0 -1px 0 rgb(0 0 0 / 0.25);
+  }
+  .btn-aluminium:hover::after,
+  .btn-aluminium:focus-visible::after {
+    transform: translateX(120%);
+  }
+  .btn-aluminium:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-aluminium,
+    .btn-aluminium::after {
+      transition: none;
+    }
+  }
+}
