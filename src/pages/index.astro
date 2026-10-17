@@ -10,12 +10,16 @@ import Sponsors from '../components/Sponsors.astro';
 import Venue from '../components/Venue.astro';
 import Footer from '../components/Footer.astro';
 import StickyCTA from '../components/StickyCTA.astro';
+import OrientationNotice from '../components/OrientationNotice.astro';
 ---
 
 <Base>
   <SiteHeader />
 
   <main id="main">
+    <div class="px-5 pt-4 sm:px-8 lg:px-12">
+      <OrientationNotice class="mx-auto max-w-5xl" />
+    </div>
     <Hero />
     <Intro />
     <Tracks />

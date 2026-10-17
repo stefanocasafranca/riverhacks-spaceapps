@@ -34,50 +34,28 @@ export const WAIVER_URL = '';
 export const FORMS_COMING_SOON =
   'Coming soon, available by October 5, 2026. We are finalizing it with ACC.';
 
-// Minors must finish the consent form AND one orientation by this date.
+// Consent form deadline as originally published. The orientation moved to
+// October 29 (see ORIENTATION); this form date was NOT changed with it, so it
+// still reads October 17 until Stefano decides.
 export const MINORS_DEADLINE = 'October 17, 2026';
 
-const ORIENTATION_TITLE = 'RiverHacks guardian orientation (required)';
-const ORIENTATION_PAGE = 'https://riverhacks-spaceapps.org/legal#orientation';
-const orientationDetails = (meet: string) =>
-  `Required to participate in RiverHacks 2026 for participants under 18. Parents and guardians attend one session; participants are strongly recommended to join them. Google Meet: ${meet} . Details: ${ORIENTATION_PAGE}`;
-
-const googleCalUrl = (start: string, end: string, meet: string) =>
-  'https://calendar.google.com/calendar/render?' +
-  new URLSearchParams({
-    action: 'TEMPLATE',
-    text: ORIENTATION_TITLE,
-    dates: `${start}/${end}`,
-    details: orientationDetails(meet),
-    location: meet,
-  }).toString().replace('%2F', '/');
-
-const MEET_OCT16 = 'https://meet.google.com/akp-uzww-hsp';
-const MEET_OCT17 = 'https://meet.google.com/yeh-hqhd-kdd';
-
+// Guardian Google Meet orientation. Moved by Stefano on 2026-10-16 from the two
+// sessions (Fri Oct 16 and Sat Oct 17) to one session on Thu Oct 29. No time is
+// set yet: keep `time` null until one is decided, and the page says
+// "Time to be announced". Never fill in a guessed time.
 export const ORIENTATION = {
-  // A guardian attends ONE of these sessions (Google Meet). Times in UTC for calendars.
-  sessions: [
-    {
-      id: 'oct16',
-      label: 'Friday, October 16, 2026, 7:00 to 7:45 PM CT',
-      meet: MEET_OCT16,
-      google: googleCalUrl('20261017T000000Z', '20261017T004500Z', MEET_OCT16),
-      ics: '/calendar/orientation-oct16.ics',
-    },
-    {
-      id: 'oct17',
-      label: 'Saturday, October 17, 2026, 10:30 to 11:15 AM CT',
-      meet: MEET_OCT17,
-      google: googleCalUrl('20261017T153000Z', '20261017T161500Z', MEET_OCT17),
-      ics: '/calendar/orientation-oct17.ics',
-    },
-  ],
+  date: 'Thursday, October 29, 2026',
+  dateShort: 'October 29, 2026',
+  time: null as string | null,
+  timeTba: 'Time to be announced',
+  // The existing Saturday session Meet room (created 2026-09-27), reused.
+  meet: 'https://meet.google.com/yeh-hqhd-kdd',
+  formLine: 'The form needs to be signed by October 29, 2026.',
 } as const;
 export const SPACE_APPS_LEGAL_URL = 'https://www.spaceappschallenge.org/legal/';
 export const LEGAL_CONTACT = 'stefano.casafrancalaos@austincc.edu';
 export const MINORS_NOTICE =
-  'Under 18 on November 14? A parent or guardian must complete these steps by October 17.';
+  'Under 18 on November 14? Guardian orientation moved to Thursday, October 29. The form needs to be signed by October 29.';
 export const LEGAL_MINORS_HREF = '/legal#minors';
 
 // --- Secured sponsors -------------------------------------------------------

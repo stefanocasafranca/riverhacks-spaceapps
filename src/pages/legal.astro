@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import Footer from '../components/Footer.astro';
+import OrientationNotice from '../components/OrientationNotice.astro';
 import {
   EVENT,
   REGISTRATION,
@@ -29,7 +30,7 @@ const MINOR_RULES = [
   'One guardian can cover up to 6 participants (one team).',
   `${b('All participants under 18 leave at 5:00 PM on Saturday, November 14')}, and keep building from home. ${b('The overnight session is for participants 18 and older only.')}`,
   `Your parent or guardian must sign the consent form by ${b(MINORS_DEADLINE)}. ${b('It is required to participate.')}`,
-  `${b('Parents and guardians must attend one of the required Google Meet orientation sessions')} by ${b(MINORS_DEADLINE)}: Friday, October 16, 2026, 7:00 to 7:45 PM CT, or Saturday, October 17, 2026, 10:30 to 11:15 AM CT. ${b('It is required to participate.')} We strongly recommend that you attend with them.`,
+  `${b('Parents and guardians must attend the required Google Meet orientation')} on ${b(ORIENTATION.date)} (${ORIENTATION.time ?? ORIENTATION.timeTba.toLowerCase()}). ${b('It is required to participate.')} We strongly recommend that you attend with them.`,
   `At check-in, a volunteer matches your signed form to you. ${b('Forms are not accepted on site')}, so anyone without a form signed in advance cannot enter.`,
 ];
 
@@ -74,6 +75,8 @@ const stepNum =
 
   <main id="main" class="relative px-5 pt-10 pb-20 sm:px-8 sm:pt-16 lg:px-12">
     <div class="mx-auto max-w-3xl">
+      <OrientationNotice class="mb-12" />
+
       <header class="scrim-text mb-12">
         <p class="eyebrow mb-4 text-cyan">RiverHacks 2026</p>
         <h1 class="display text-[clamp(2.5rem,11vw,4.5rem)]">Legal</h1>
@@ -154,13 +157,13 @@ const stepNum =
           <li class="flex gap-4 py-5">
             <span aria-hidden="true" class={stepNum}>3</span>
             <p class="pt-1 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
-              <strong class="font-semibold text-ink">Parent or guardian attends one Google Meet orientation session</strong> by{' '}
-              <strong class="text-ink">{MINORS_DEADLINE}</strong>: Friday, October 16, 2026, 7:00 to
-              7:45 PM CT, or Saturday, October 17, 2026, 10:30 to 11:15 AM CT.{' '}
+              <strong class="font-semibold text-ink">Parent or guardian attends the Google Meet orientation</strong> on{' '}
+              <strong class="text-ink">{ORIENTATION.date}</strong> ({ORIENTATION.time ?? ORIENTATION.timeTba.toLowerCase()}). It
+              replaces the October 16 and 17 sessions.{' '}
               <strong class="font-semibold text-ink">It is required to participate.</strong> At the session we
               confirm which participants each guardian is approved to supervise. We strongly recommend
               that participants attend with their guardian.{' '}
-              <a href="#orientation" class={link}>Meet links and calendar invites</a>
+              <a href="#orientation" class={link}>Google Meet link</a>
             </p>
           </li>
           <li class="flex gap-4 py-5 last:pb-0">
@@ -181,30 +184,19 @@ const stepNum =
         </h2>
         <p class="mt-5 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
           On Google Meet.{' '}
-          <strong class="font-semibold text-ink">Parents and guardians must attend one of the required sessions by {MINORS_DEADLINE}.</strong>{' '}
-          We strongly recommend that participants attend with them.
+          <strong class="font-semibold text-ink">Parents and guardians must attend on {ORIENTATION.date}.</strong>{' '}
+          It replaces the October 16 and 17 sessions. We strongly recommend that participants attend with them.
         </p>
 
-        <ul class="mt-7 divide-y divide-white/8">
-          {
-            ORIENTATION.sessions.map((s) => (
-              <li class="flex flex-col gap-3 py-5 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between">
-                <p class="text-[0.9375rem] font-medium text-ink sm:text-base">{s.label}</p>
-                <div class="flex flex-wrap gap-2">
-                  <a href={s.meet} target="_blank" rel="noopener" class:list={[btn, 'border-cyan bg-cyan text-space hover:bg-cyan-hi hover:text-space']}>
-                    Join on Google Meet <span aria-hidden="true">&rarr;</span>
-                  </a>
-                  <a href={s.google} target="_blank" rel="noopener" class={btn}>
-                    Google Calendar
-                  </a>
-                  <a href={s.ics} download class={btn}>
-                    Apple / Outlook (.ics)
-                  </a>
-                </div>
-              </li>
-            ))
-          }
-        </ul>
+        <div class="mt-7 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <p class="text-[0.9375rem] font-medium text-ink sm:text-base">
+            {ORIENTATION.date}{ORIENTATION.time ? `, ${ORIENTATION.time}` : ''}
+            {!ORIENTATION.time && <span class="block text-ink-3">{ORIENTATION.timeTba}</span>}
+          </p>
+          <a href={ORIENTATION.meet} target="_blank" rel="noopener" class:list={[btn, 'border-cyan bg-cyan text-space hover:bg-cyan-hi hover:text-space']}>
+            Join on Google Meet <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
       </section>
 
       <!-- ===== All participants ===== -->
