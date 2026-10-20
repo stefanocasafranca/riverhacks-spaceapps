@@ -34,10 +34,9 @@ export const WAIVER_URL = '';
 export const FORMS_COMING_SOON =
   'Coming soon, available by October 5, 2026. We are finalizing it with ACC.';
 
-// Consent form deadline as originally published. The orientation moved to
-// October 29 (see ORIENTATION); this form date was NOT changed with it, so it
-// still reads October 17 until Stefano decides.
-export const MINORS_DEADLINE = 'October 17, 2026';
+// Consent form deadline. Stefano set October 29 (the orientation day) as the
+// one signing deadline on 2026-10-20, replacing Oct 17 and Oct 25.
+export const MINORS_DEADLINE = 'October 29, 2026';
 
 // Guardian Google Meet orientation. Moved by Stefano on 2026-10-16 from the two
 // sessions (Fri Oct 16 and Sat Oct 17) to one session on Thu Oct 29. No time is
