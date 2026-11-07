@@ -64,8 +64,8 @@ export const SPONSORS = {
     name: 'SerpApi',
     url: 'https://serpapi.com/',
     logo: '/brand/serpapi-logo-white.svg',
-    width: 4680,
-    height: 1340,
+    width: 1764,
+    height: 439,
     credit: 'RiverHacks, powered by SerpApi',
   },
   platinum: {
