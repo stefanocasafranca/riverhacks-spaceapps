@@ -7,7 +7,6 @@ import {
   EVENT,
   SPONSORS,
   SPONSOR_TIER_SHEET_URL,
-  SPONSOR_CONTACT,
 } from '../data/event';
 
 // Accent → utility map. Kept explicit rather than interpolated so Tailwind's
@@ -199,12 +198,6 @@ const glow: Record<string, string> = {
       >
         View the tier sheet
         <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
-      </a>
-      <a
-        href={`mailto:${SPONSOR_CONTACT}?subject=RiverHacks%202026%20sponsorship`}
-        class="inline-flex max-w-full items-center justify-center rounded-full border border-violet/40 px-6 py-3.5 text-[0.875rem] font-medium break-all text-ink transition hover:border-violet hover:text-violet sm:text-[0.9375rem]"
-      >
-        {SPONSOR_CONTACT}
       </a>
     </div>
   </div>

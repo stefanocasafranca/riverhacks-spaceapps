@@ -13,7 +13,6 @@ import {
   ORIENTATION,
   SPACE_APPS_AUSTIN_URL,
   SPACE_APPS_LEGAL_URL,
-  LEGAL_CONTACT,
   REGISTER_URL,
 } from '../data/event';
 
@@ -130,7 +129,7 @@ const stepNum =
                 (choose Austin, Texas).
               </p>
               <p class="mt-2 text-[0.875rem] text-ink-3">
-                Note: {REGISTRATION.closed} {REGISTRATION.full}
+                Note: {REGISTRATION.closed}
               </p>
             </div>
           </li>
@@ -242,13 +241,6 @@ const stepNum =
               campus rules.
             </span>
           </li>
-          <li class={bullet}>
-            <span aria-hidden="true" class:list={[dot, 'bg-cyan']}></span>
-            <span>
-              Questions:{' '}
-              <a href={`mailto:${LEGAL_CONTACT}`} class:list={[link, 'break-all']}>{LEGAL_CONTACT}</a>
-            </span>
-          </li>
         </ul>
       </section>
 
@@ -271,9 +263,7 @@ const stepNum =
           <li class={bullet}>
             <span aria-hidden="true" class:list={[dot, 'bg-violet']}></span>
             <span>
-              To report a concern, tell any organizer or volunteer, or email{' '}
-              <a href={`mailto:${LEGAL_CONTACT}`} class:list={[link, 'break-all']}>{LEGAL_CONTACT}</a>.
-              In an emergency, call 911.
+              To report a concern, tell any organizer or volunteer. In an emergency, call 911.
             </span>
           </li>
         </ul>

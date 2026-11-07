@@ -1,5 +1,5 @@
 ---
-import { REGISTRATION, WAITLIST_URL } from '../data/event';
+import { REGISTRATION } from '../data/event';
 ---
 
 <!--
@@ -16,16 +16,8 @@ import { REGISTRATION, WAITLIST_URL } from '../data/event';
   >
     <p class="min-w-0 flex-1 text-[0.8125rem] leading-tight text-ink-2">
       <span class="block font-semibold text-ink">Nov 14–15 · Austin</span>
-      {REGISTRATION.closed} {REGISTRATION.full}
+      {REGISTRATION.closed}
     </p>
-    <a
-      href={WAITLIST_URL}
-      target="_blank"
-      rel="noopener"
-      class="btn-aluminium shrink-0 rounded-xl px-4 py-3 text-[0.9375rem] font-semibold"
-    >
-      ACC waitlist
-    </a>
   </div>
 </div>
 
