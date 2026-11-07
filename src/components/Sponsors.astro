@@ -1,56 +1,24 @@
 ---
 import Section from './Section.astro';
-import {
-  TIERS,
-  SPONSOR_AUDIENCE,
-  SPONSOR_CLOSER,
-  EVENT,
-  SPONSORS,
-  SPONSOR_TIER_SHEET_URL,
-} from '../data/event';
-
-// Accent → utility map. Kept explicit rather than interpolated so Tailwind's
-// scanner can see every class name it needs to emit.
-const ring: Record<string, string> = {
-  pink: 'border-pink/35',
-  cyan: 'border-cyan/35',
-  gold: 'border-gold/35',
-  violet: 'border-violet/45',
-  ink: 'border-white/30',
-};
-const text: Record<string, string> = {
-  pink: 'text-pink',
-  cyan: 'text-cyan',
-  gold: 'text-gold',
-  violet: 'text-violet',
-  ink: 'text-ink',
-};
-const glow: Record<string, string> = {
-  pink: 'bg-pink/15',
-  cyan: 'bg-cyan/15',
-  gold: 'bg-gold/15',
-  violet: 'bg-violet/20',
-  ink: 'bg-white/10',
-};
+import { SPONSORS, SUPPORTERS } from '../data/event';
 ---
 
 <Section
   chapter="mars"
   id="sponsor"
-  eyebrow="Partner with us"
+  eyebrow="Thank you"
   title="Sponsors"
   accent="violet"
   wide
 >
   <p class="-mt-6 mb-10 max-w-2xl text-[0.975rem] leading-relaxed text-ink-2 sm:text-lg">
-    {EVENT.sponsorTagline} Put your tools in 200 builders' hands for a weekend, and your
-    name on the work that comes out of it.
+    RiverHacks 2026 is made possible by these partners.
   </p>
 
   <!-- Secured sponsors. Title is the largest mark on the page section,
-       Platinum next, the open tiers below are smaller still. Official
-       white-on-dark logo files, served locally from /public/brand. -->
-  <div class="mb-12 grid gap-4">
+       Platinum next, then Gold, then the smaller tiers. Logo files are
+       served locally from /public/brand. -->
+  <div class="mb-4 grid gap-4">
     <a
       href={SPONSORS.title.url}
       target="_blank"
@@ -91,114 +59,57 @@ const glow: Record<string, string> = {
         class="relative mx-auto mt-5 h-auto w-[min(70%,18rem)]"
       />
     </a>
+
+    <a
+      href={SPONSORS.gold.url}
+      target="_blank"
+      rel="noopener"
+      class="panel group relative block overflow-hidden rounded-3xl border-gold/35 px-6 py-7 text-center transition hover:border-gold sm:px-10 sm:py-9"
+    >
+      <div aria-hidden="true" class="pointer-events-none absolute -top-20 left-1/2 h-40 w-56 -translate-x-1/2 rounded-full bg-gold/15 blur-3xl"></div>
+      <p class="eyebrow relative text-gold">{SPONSORS.gold.tier}</p>
+      <div class="relative mt-5 flex items-center justify-center gap-3">
+        <img
+          src={SPONSORS.gold.logo}
+          alt=""
+          width={SPONSORS.gold.width}
+          height={SPONSORS.gold.height}
+          loading="lazy"
+          decoding="async"
+          class="h-12 w-12 sm:h-14 sm:w-14"
+        />
+        <span class="display text-[clamp(1.25rem,5.5vw,1.75rem)] text-ink">{SPONSORS.gold.name}</span>
+      </div>
+    </a>
   </div>
 
-  <!-- Who's in the room -->
-  <dl class="panel mb-10 grid grid-cols-2 gap-y-6 rounded-2xl px-2 py-6 sm:grid-cols-4 sm:px-4">
+  <!-- Smaller tiers: one tile each, logo on a neutral plate. -->
+  <ul class="grid gap-4 sm:grid-cols-3">
     {
-      SPONSOR_AUDIENCE.map((s, i) => (
-        <div
-          class:list={[
-            'px-3 text-center sm:px-4',
-            i % 2 === 1 && 'border-l border-white/10',
-            i > 0 && 'sm:border-l sm:border-white/10',
-          ]}
-        >
-          <dt class="sr-only">{s.label}</dt>
-          <dd>
-            <span class="display block text-[clamp(1.5rem,6.5vw,2.25rem)] text-violet">
-              {s.value}
-            </span>
-            <span class="mt-1.5 block text-[0.75rem] leading-snug text-ink-3">{s.label}</span>
-          </dd>
-        </div>
-      ))
-    }
-  </dl>
-
-  <h3 class="display mb-2 text-[clamp(1.5rem,6vw,2.25rem)]">Available tiers</h3>
-  <p class="mb-6 text-[0.9375rem] text-ink-2">Three ways to put your name on the weekend.</p>
-  <p class="eyebrow mb-4 text-ink-3 md:hidden">Swipe through the tiers &rarr;</p>
-
-  <!-- items-start, not stretch: equal heights would pad the two-bullet Startup
-       card out to the five-bullet Title Partner card's height on mobile. -->
-  <ul class="rail tiers-3 items-start">
-    {
-      TIERS.map((t) => (
-        <li
-          class:list={[
-            'panel relative flex h-full flex-col overflow-hidden rounded-3xl p-6',
-            ring[t.accent],
-          ]}
-        >
-          <div
-            aria-hidden="true"
-            class:list={[
-              'pointer-events-none absolute -top-20 -left-12 h-44 w-44 rounded-full blur-3xl',
-              glow[t.accent],
-            ]}
-          />
-
-          {/* Name + price. Stacks above the benefits on phone, becomes the
-              left column of the flyer's ladder row from md: up. */}
-          <div class="relative">
-            <span aria-hidden="true" class="text-2xl leading-none">
-              {t.icon}
-            </span>
-            <h4 class:list={['display mt-3 text-[clamp(1.25rem,5vw,1.5rem)]', text[t.accent]]}>
-              {t.name}
-            </h4>
-            <p class="display mt-2 text-[clamp(1.5rem,6vw,1.9rem)] text-ink tabular-nums">
-              {t.price}
-            </p>
-            {t.status && (
-              <p
-                class:list={[
-                  'eyebrow mt-3 inline-block rounded-full border px-2.5 py-1',
-                  'border-white/30 text-ink',
-                ]}
-              >
-                {t.status.label}
-              </p>
-            )}
-          </div>
-
-          <ul class="relative mt-6 flex-1 space-y-2.5 border-t border-white/8 pt-5">
-            {t.benefits.map((b) => (
-              <li class="flex gap-2.5 text-[0.875rem] leading-relaxed text-ink-2 sm:text-[0.9375rem]">
-                <span aria-hidden="true" class:list={['mt-[0.45em] h-1 w-1 shrink-0 rounded-full', text[t.accent], 'bg-current']} />
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-        </li>
-      ))
+      SUPPORTERS.map((s) => {
+        const Tag = s.url ? 'a' : 'div';
+        return (
+          <li>
+            <Tag
+              {...(s.url ? { href: s.url, target: '_blank', rel: 'noopener' } : {})}
+              class="panel flex h-full flex-col items-center rounded-3xl border-white/20 px-6 py-6 text-center transition hover:border-white/50"
+            >
+              <p class="eyebrow text-ink-2">{s.tier}</p>
+              <div class="mt-4 flex h-20 w-full items-center justify-center">
+                <img
+                  src={s.logo}
+                  alt={s.name}
+                  width={s.width}
+                  height={s.height}
+                  loading="lazy"
+                  decoding="async"
+                  class:list={[s.width / s.height > 2 ? 'h-9' : 'h-16', 'w-auto max-w-full object-contain']}
+                />
+              </div>
+            </Tag>
+          </li>
+        );
+      })
     }
   </ul>
-
-  <!-- Closer, lifted from the sponsorship flyer -->
-  <div class="scrim-text mt-12 text-center">
-    <p class="display text-[clamp(1.5rem,6.5vw,2.75rem)]">
-      {SPONSOR_CLOSER.lines.map((l) => <span class="block">{l}</span>)}
-    </p>
-    <p
-      class="mt-3 text-[clamp(1.5rem,6vw,2.5rem)] text-pink italic"
-      style="font-family: var(--font-display); font-variation-settings: 'wdth' 90, 'wght' 500;"
-    >
-      {SPONSOR_CLOSER.script}
-    </p>
-
-    <h3 class="eyebrow mt-10 text-violet">Become a sponsor</h3>
-    <div class="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
-      <a
-        href={SPONSOR_TIER_SHEET_URL}
-        target="_blank"
-        rel="noopener"
-        class="group inline-flex items-center justify-center gap-2 rounded-full bg-violet px-7 py-3.5 text-[0.9375rem] font-semibold text-space transition hover:bg-white"
-      >
-        View the tier sheet
-        <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">&rarr;</span>
-      </a>
-    </div>
-  </div>
 </Section>

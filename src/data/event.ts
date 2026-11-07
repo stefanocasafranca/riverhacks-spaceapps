@@ -69,10 +69,43 @@ export const SPONSORS = {
     width: 694,
     height: 90,
   },
+  gold: {
+    tier: 'Gold Sponsor',
+    name: 'Firefly Aerospace',
+    url: 'https://fireflyspace.com/',
+    logo: '/brand/firefly-icon.svg',
+    width: 2000,
+    height: 2000,
+  },
 } as const;
 
-export const SPONSOR_TIER_SHEET_URL =
-  'https://drive.google.com/file/d/14MeobzzVha0luoRpQjlkobB8TLWZ7YjC/view';
+// Smaller tiers, shown as a row of logo tiles under Gold. url: null = no link.
+export const SUPPORTERS = [
+  {
+    tier: 'Silver Sponsor',
+    name: 'Loop Message',
+    url: 'https://loopmessage.com/',
+    logo: '/brand/loopmessage-logo.svg',
+    width: 1024,
+    height: 867,
+  },
+  {
+    tier: 'Startup Supporter',
+    name: 'AI Security Engineering Austin',
+    url: null,
+    logo: '/brand/aiseceng-logo-white.svg',
+    width: 292,
+    height: 71,
+  },
+  {
+    tier: 'Food Sponsor',
+    name: 'Whole Foods Market',
+    url: 'https://www.wholefoodsmarket.com/',
+    logo: '/brand/wholefoods-logo.svg',
+    width: 725,
+    height: 725,
+  },
+] as const;
 
 export const SPACE_APPS_URL = 'https://www.spaceappschallenge.org/';
 
@@ -85,7 +118,6 @@ export const EVENT = {
   name: 'RiverHacks × NASA Space Apps Challenge',
   year: '2026',
   tagline: 'Innovate. Collaborate. Launch change.',
-  sponsorTagline: 'The world. Your ideas. One weekend to launch change.',
   headline: ['One weekend.', 'One project.', 'Two competitions.'],
 
   intro:
@@ -220,64 +252,6 @@ export const STEPS = [
     link: null,
   },
 ] as const;
-
-// --- Sponsorship ------------------------------------------------------------
-export const SPONSOR_AUDIENCE = [
-  { value: 'All', label: 'Local universities represented' },
-  { value: '200', label: 'Max participants' },
-  { value: '$10K', label: 'In prizes' },
-  { value: 'K–12', label: 'Middle & high schools in Central Austin' },
-] as const;
-
-// Tiers still open. Title (SerpApi) and Platinum (ElevenLabs) are secured and
-// shown as logos in SPONSORS above. Ordered largest first.
-export const TIERS = [
-  {
-    id: 'gold',
-    name: 'Gold Sponsor',
-    price: '$5,000',
-    accent: 'gold',
-    icon: '🏆',
-    status: { label: 'Available', tone: 'open' },
-    benefits: [
-      '30-minute workshop or tech talk on the schedule',
-      'Logo on the main stage and winners’ backdrop',
-      'Logo on every participant’s certificate',
-      'Plus everything in Silver',
-    ],
-  },
-  {
-    id: 'silver',
-    name: 'Silver Sponsor',
-    price: '$2,500',
-    accent: 'cyan',
-    icon: '🥈',
-    status: { label: 'Available', tone: 'open' },
-    benefits: [
-      'Logo on participant T-shirts and stickers',
-      'Two minutes on the main stage at opening',
-      'A sponsor table, both days',
-      'Plus everything in Startup Supporter',
-    ],
-  },
-  {
-    id: 'startup',
-    name: 'Startup Supporter',
-    price: 'Under $1,000',
-    accent: 'pink',
-    icon: '🚀',
-    status: { label: 'Available', tone: 'open' },
-    benefits: [
-      'Logo on the event site and welcome packet',
-      'Social media shout-out',
-    ],
-  },
-] as const;
-
-export const SPONSOR_CLOSER = {
-  lines: ['Build solutions.', 'Inspire the future.'],
-  script: 'Leave Your Mark.',
-} as const;
 
 // --- Scroll chapters --------------------------------------------------------
 // Shared between the DOM (section data-chapter attributes) and the three.js
