@@ -1,0 +1,31 @@
+---
+import Section from './Section.astro';
+import { AGENDA } from '../data/event';
+
+// Accent → utility map, explicit so Tailwind's scanner sees every class.
+const text: Record<string, string> = { cyan: 'text-cyan', pink: 'text-pink' };
+const ring: Record<string, string> = { cyan: 'border-cyan/35', pink: 'border-pink/35' };
+---
+
+<Section chapter="transit" id="agenda" eyebrow="November 14–15" title="Agenda" accent="cyan" wide>
+  <div class="grid items-start gap-5 lg:grid-cols-2">
+    {
+      AGENDA.map((d) => (
+        <div class:list={['panel rounded-3xl p-6 sm:p-8', ring[d.accent]]}>
+          <h3 class:list={['display text-[clamp(1.5rem,6vw,2rem)]', text[d.accent]]}>{d.day}</h3>
+          <p class="eyebrow mt-1 text-ink-3">{d.date}</p>
+          <ol class="mt-5 divide-y divide-white/8">
+            {d.items.map((i) => (
+              <li class="grid grid-cols-[6.5rem_1fr] gap-4 py-3.5 first:pt-0 last:pb-0 sm:grid-cols-[8.5rem_1fr]">
+                <span class="text-[0.875rem] font-semibold text-ink tabular-nums sm:text-[0.9375rem]">
+                  {i.time}
+                </span>
+                <span class="text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">{i.label}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))
+    }
+  </div>
+</Section>

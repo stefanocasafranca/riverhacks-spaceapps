@@ -16,7 +16,7 @@ export const REGISTER_URL = 'https://luma.com/n9rvutt0';
 // --- Registration status ----------------------------------------------------
 export const REGISTRATION = {
   closed: 'Registrations are closed.',
-  spaceApps: 'Anyone can still join NASA Space Apps online.',
+  spaceApps: 'Online Participation through',
 } as const;
 
 // --- Legal / minors ---------------------------------------------------------
@@ -232,6 +232,42 @@ export const TIMELINE = [
   { date: 'Sept 17', label: 'Challenge summaries released', done: false },
   { date: 'Oct 28', label: 'Full challenge statements', done: false },
   { date: 'Nov 14–15', label: 'Hackathon weekend · 9:00 AM CST', done: false },
+] as const;
+
+// --- Weekend agenda ---------------------------------------------------------
+// Mirrors the Schedule in the welcome packet sent to participants (Nov 2).
+export const AGENDA = [
+  {
+    day: 'Saturday',
+    date: 'November 14',
+    accent: 'cyan',
+    items: [
+      { time: '8:30 AM', label: 'Doors open, check-in' },
+      { time: '9:00 AM – 12:00 PM', label: 'Elementary activation in the library (level 0)' },
+      { time: '10:00 AM', label: 'Opening ceremony' },
+      { time: '11:00 AM', label: 'Hacking starts' },
+      { time: '12:45 PM', label: 'Lunch' },
+      { time: '2:00 PM', label: 'Optional breakout sessions with mentors' },
+      { time: '4:30 PM', label: '30-minute warning for participants under 18' },
+      {
+        time: '5:00 PM',
+        label: 'Participants under 18 leave with their supervising adult and keep working online from home',
+      },
+      { time: 'Overnight', label: 'Hacking continues, 18+ only' },
+    ],
+  },
+  {
+    day: 'Sunday',
+    date: 'November 15',
+    accent: 'pink',
+    items: [
+      { time: '9:00 AM', label: 'Participants under 18 return with their yellow card' },
+      { time: '1:00 PM', label: 'RiverHacks submission deadline (GitHub)' },
+      { time: '2:00 PM', label: 'Pitch competition' },
+      { time: '~5:00 PM', label: 'Winners announced, closing' },
+      { time: '11:59 PM', label: 'NASA global submission deadline' },
+    ],
+  },
 ] as const;
 
 // --- How to participate -----------------------------------------------------
