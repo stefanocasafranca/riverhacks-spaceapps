@@ -1,0 +1,59 @@
+---
+import Section from './Section.astro';
+import { NASA_SUBMIT } from '../data/event';
+
+const link = 'font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan';
+const p = 'text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base';
+---
+
+<Section chapter="orbit" id="judging" eyebrow="Sunday, November 15" title="How judging works" accent="gold" wide>
+  <div class="grid gap-5 md:grid-cols-2">
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="display text-[clamp(1.25rem,5vw,1.6rem)] text-cyan">Middle school</h3>
+      <p class="mt-4 font-medium text-ink">Starts Sunday at 2:00 PM · Student Commons</p>
+      <p class={`mt-3 ${p}`}>Judged separately from high school and college, with its own rubric.</p>
+      <p class="mt-3 text-[0.8125rem] leading-snug text-ink-3">
+        Note: judges may walk around team by team, or we may run pitches like high school. It depends on the number of teams.
+      </p>
+    </div>
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="display text-[clamp(1.25rem,5vw,1.6rem)] text-pink">High school and college</h3>
+      <p class="mt-4 font-medium text-ink">Starts Sunday at 2:00 PM · Multipurpose Room</p>
+      <p class={`mt-3 ${p}`}>3 minutes to pitch, plus 2 minutes of Q&amp;A from the judges.</p>
+    </div>
+  </div>
+  <p class={`scrim-text mt-6 ${p}`}>
+    Judges look at problem understanding, impact, originality and build quality, plus how clearly you present and demo. Each category is scored 1 to 5.
+  </p>
+
+  <div class="mt-5 grid gap-5 md:grid-cols-2">
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="eyebrow text-cyan">Submitting to NASA Space Apps</h3>
+      <p class={`mt-4 ${p}`}>
+        Local winners are recognized in Austin, and you can keep working and submit to NASA global judging until
+        <strong class="font-semibold text-ink">Sunday 11:59 PM</strong>. If you do not click
+        <strong class="font-semibold text-ink">"Submit to Global Judging"</strong> on your project page, it will not be entered.
+        NASA announces global winners in January 2027.
+      </p>
+      <p class={`mt-3 ${p}`}>
+        To be eligible, your team must submit its project through its
+        <a href={NASA_SUBMIT.teamsUrl} target="_blank" rel="noopener" class={link}>team project page</a>.
+        The Project Submission Guide, with step-by-step instructions, will be available on November 13 in the
+        <a href={NASA_SUBMIT.guideUrl} target="_blank" rel="noopener" class={link}>playlist</a>.
+      </p>
+    </div>
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="eyebrow text-gold">Good news: You can still be part of NASA Space Apps!</h3>
+      <p class={`mt-4 ${p}`}>
+        RiverHacks is simply a local host venue for the challenge. You do NOT need us to participate, and you don't need to miss out!
+      </p>
+      <p class={`mt-3 ${p}`}>
+        Gather your team and start building on Saturday, November 14: code from home, collaborate online, or meet at a local coffee shop. The opportunity is still yours! You can still submit your project for Global Judging through your
+        <a href={NASA_SUBMIT.teamsUrl} target="_blank" rel="noopener" class={link}>team project page</a>.
+      </p>
+      <p class={`mt-3 ${p}`}>
+        Don't let a change in venue stop your innovation. The challenge is still on. Your ideas still matter. Now go build something extraordinary!
+      </p>
+    </div>
+  </div>
+</Section>

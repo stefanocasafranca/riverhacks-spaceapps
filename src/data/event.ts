@@ -26,7 +26,7 @@ export const CONSENT_FORM_URL = '';
 // TODO(Stefano): RiverHacks Participant Waiver URL.
 export const WAIVER_URL = '';
 export const FORMS_COMING_SOON =
-  'Coming soon, available by October 5, 2026. We are finalizing it with ACC.';
+  'Sent by email to registered participants. Forms are not accepted on site.';
 
 // Consent form deadline. Stefano set October 29 (the orientation day) as the
 // one signing deadline on 2026-10-20, replacing Oct 17 and Oct 25.
@@ -47,7 +47,7 @@ export const ORIENTATION = {
 } as const;
 export const SPACE_APPS_LEGAL_URL = 'https://www.spaceappschallenge.org/legal/';
 export const MINORS_NOTICE =
-  'Under 18 on November 14? Guardian orientation moved to Thursday, October 29. The form needs to be signed by October 29.';
+  'Under 18 on November 14? A registered supervising adult must stay on campus with you. No signed form, no badge.';
 export const LEGAL_MINORS_HREF = '/legal#minors';
 
 // --- Secured sponsors -------------------------------------------------------
@@ -125,8 +125,8 @@ export const EVENT = {
 
   dates: {
     label: 'November 14–15, 2026',
-    iso: { start: '2026-11-14T09:00:00-06:00', end: '2026-11-15T23:59:00-06:00' },
-    startTime: '9:00 AM CST',
+    iso: { start: '2026-11-14T08:00:00-06:00', end: '2026-11-15T17:30:00-06:00' },
+    startTime: '8:00 AM CST',
   },
 
   venue: {
@@ -153,8 +153,8 @@ export const EVENT = {
 
 // --- Hero stat bar (event flyer) -------------------------------------------
 export const STATS = [
-  { value: '200', label: 'Seats filled', accent: 'ink' },
-  { value: '$10,000', label: 'In prizes', accent: 'gold' },
+  { value: 'Closed', label: 'Registration', accent: 'ink' },
+  { value: '$10,950', label: 'In prizes', accent: 'gold' },
   { value: 'Free', label: 'To enter', accent: 'cyan' },
   { value: 'All', label: 'Skill levels', accent: 'violet' },
 ] as const;
@@ -178,15 +178,8 @@ export const TRACKS = [
     name: 'RiverHacks Track',
     kicker: 'No NASA dataset required',
     accent: 'pink',
-    body: 'One challenge: Build Something Great. Perfect for creative, interdisciplinary or first-time teams.',
-    themes: [
-      'Mind of the Astronaut',
-      'On-Ship Ecosystem',
-      'AI for Space',
-      'Space Play & Fitness',
-      'AI Space Search',
-      'Spacesuit AR',
-    ],
+    body: 'One theme: Build Something Great. Your project must work, be demoed, and live on GitHub. Perfect for creative, interdisciplinary or first-time teams.',
+    themes: [],
     link: null,
   },
 ] as const;
@@ -195,20 +188,68 @@ export const TRACKS_BRIDGE = 'Do both — with one single project';
 
 // --- Prizes -----------------------------------------------------------------
 export const PRIZES = {
-  total: '$10,000',
-  awards: [
-    { medal: '🥇', place: '1st place overall', amount: '$3,000', accent: 'gold' },
-    { medal: '🥈', place: '2nd place overall', amount: '$1,500', accent: 'ink' },
-    { medal: '🥉', place: '3rd place overall', amount: '$500', accent: 'ink' },
+  total: '$10,950',
+  groups: [
     {
-      medal: '🤖',
-      place: 'Bold Innovation in Search & AI',
-      amount: '$5,000',
-      accent: 'violet',
-      note: 'presented by SerpApi · allocated by special jury',
+      label: 'High school and college',
+      subtotal: '$10,000',
+      awards: [
+        { medal: '🥇', place: '1st place', amount: '$3,000', accent: 'gold' },
+        { medal: '🥈', place: '2nd place', amount: '$1,500', accent: 'ink' },
+        { medal: '🥉', place: '3rd place', amount: '$500', accent: 'ink' },
+        {
+          medal: '🤖',
+          place: 'Bold Innovation in Search & AI',
+          amount: '$5,000',
+          accent: 'violet',
+          note: 'from SerpApi · allocated across teams that achieve bold innovation in search and AI; they do not have to be the top-three winners',
+        },
+      ],
+    },
+    {
+      label: 'Middle school',
+      subtotal: '$950',
+      awards: [
+        { medal: '🥇', place: '1st place', amount: '$500', accent: 'gold' },
+        { medal: '🥈', place: '2nd place', amount: '$300', accent: 'ink' },
+        { medal: '🥉', place: '3rd place', amount: '$150', accent: 'ink' },
+      ],
     },
   ],
 } as const;
+
+// --- ElevenLabs (in-kind, not part of the cash pool) ------------------------
+export const ELEVENLABS = {
+  prizes: [
+    {
+      place: 'Overall winning team',
+      detail: 'Each team member receives 3 months of the Pro tier ($297 value per team member, 600k credits/mo).',
+    },
+    {
+      place: 'Best Project Built with ElevenLabs',
+      detail: 'Each team member receives 3 months of the Scale tier ($897 value per team member, 1.8M credits/mo).',
+    },
+  ],
+  everyone: '1 month free of the Creator tier (normally $22/month, 131k credits).',
+  discord: 'https://discord.com/invite/VnBvbbcdEC',
+  tutorial: 'https://youtu.be/S143_JtCtV8',
+  guide: 'https://docs.google.com/document/d/1mCh5MtOzBw0aJpurQVUmIVFfPMAHW3MjNemE-LNiMto/edit?usp=sharing',
+} as const;
+
+// --- SerpApi participant perks ----------------------------------------------
+export const SERPAPI_PERKS = {
+  careers: 'https://serpapi.com/careers',
+  careersSubject: 'RiverHacks - NASA participant: [The role you are applying for]',
+  coupon: 'https://serpapi.com/riverhacksnasa',
+} as const;
+
+// --- NASA submission --------------------------------------------------------
+export const NASA_SUBMIT = {
+  teamsUrl: 'https://www.spaceappschallenge.org/2026/local-events/austin/?tab=teams',
+  guideUrl: 'https://www.youtube.com/playlist?list=PLTPrbzl1eIYU',
+} as const;
+
+export const DISCORD_URL = 'https://discord.gg/JeUCYDZ7H';
 
 // --- The two Sunday deadlines ----------------------------------------------
 export const DEADLINES = [
@@ -231,18 +272,18 @@ export const TIMELINE = [
   { date: 'Aug 26', label: 'NASA registration opens', done: true },
   { date: 'Sept 17', label: 'Challenge summaries released', done: false },
   { date: 'Oct 28', label: 'Full challenge statements', done: false },
-  { date: 'Nov 14–15', label: 'Hackathon weekend · 9:00 AM CST', done: false },
+  { date: 'Nov 14–15', label: 'Hackathon weekend · 8:00 AM CST', done: false },
 ] as const;
 
 // --- Weekend agenda ---------------------------------------------------------
-// Mirrors the Schedule in the welcome packet sent to participants (Nov 2).
+// Mirrors the Schedule in the welcome packet sent to participants (Nov 9).
 export const AGENDA = [
   {
     day: 'Saturday',
     date: 'November 14',
     accent: 'cyan',
     items: [
-      { time: '8:30 AM', label: 'Doors open, check-in' },
+      { time: '8:00 AM', label: 'Doors open, check-in' },
       { time: '9:00 AM – 12:00 PM', label: 'Elementary activation in the library (level 0)' },
       { time: '10:00 AM', label: 'Opening ceremony' },
       { time: '11:00 AM', label: 'Hacking starts' },
@@ -261,10 +302,10 @@ export const AGENDA = [
     date: 'November 15',
     accent: 'pink',
     items: [
-      { time: '9:00 AM', label: 'Participants under 18 return with their yellow card' },
+      { time: '8:00 AM', label: 'Check-in starts. Participants under 18 return with their yellow card' },
       { time: '1:00 PM', label: 'RiverHacks submission deadline (GitHub)' },
       { time: '2:00 PM', label: 'Pitch competition' },
-      { time: '~5:00 PM', label: 'Winners announced, closing' },
+      { time: 'By 5:30 PM', label: 'Winners announced, event done' },
       { time: '11:59 PM', label: 'NASA global submission deadline' },
     ],
   },
@@ -322,5 +363,5 @@ export const CREDITS = [
 export const SEO = {
   title: 'RiverHacks 2026 — Austin’s NASA Space Apps Challenge',
   description:
-    'Nov 14–15, 2026 · Austin, TX. Registrations are closed. $10,000 in prizes, all skill levels. One weekend, one project, two competitions.',
+    'Nov 14–15, 2026 · Austin, TX. Registrations are closed. $10,950 in prizes, all skill levels. One weekend, one project, two competitions.',
 } as const;

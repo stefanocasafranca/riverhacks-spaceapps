@@ -1,0 +1,76 @@
+---
+import Section from './Section.astro';
+import { DISCORD_URL } from '../data/event';
+
+const link = 'font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan';
+const cards = [
+  {
+    title: 'Getting in',
+    items: [
+      'No walk-ins and no unregistered guests, including at the Sunday pitches.',
+      'No signed form, no badge. Everyone needs a signed Participant Information & Code of Conduct form. Participants under 18 also need the signed Parent Authorization.',
+      'To count for NASA, also register at spaceappschallenge.org and choose Austin, Texas.',
+    ],
+  },
+  {
+    title: 'Check-in',
+    items: [
+      'Check-in starts at 8:00 AM both days.',
+      'Facing the building, right line: adults 18+ (participants, mentors, judges). Left line: participants under 18 and their supervising adults.',
+      'You get a badge and a color-coded lanyard. Wear it at all times inside the venue: no badge, no entry.',
+    ],
+  },
+  {
+    title: 'Fair play',
+    items: [
+      'Practice before the event is encouraged, but your submitted repository must be created and written during the event.',
+      'Open-source libraries, frameworks and public NASA data are welcome.',
+      'Projects built before the event are not eligible for prizes; the commit history is the check.',
+    ],
+  },
+  {
+    title: 'Parking and access',
+    items: [
+      'Free parking at the ACC Rio Grande Parking Garage, 824 W 12th St, entrance on W 12th St.',
+      'The venue is ADA accessible, and the elevator is available for accessibility.',
+      'Use the main entrance only.',
+    ],
+  },
+  {
+    title: 'Food',
+    items: [
+      'Meals, snacks and drinks are provided for participants at set times.',
+      'Supervising adults are not catered: please bring your own food.',
+    ],
+  },
+  {
+    title: 'Bring',
+    items: [
+      'Laptop and charger, headphones, reusable water bottle.',
+      'Photo ID (supervising adults). Your yellow card on Sunday (under 18).',
+      'Do not bring alcohol, drugs, weapons of any kind (including concealed carry), unauthorized promotional material, or guests who are not registered.',
+    ],
+  },
+];
+---
+
+<Section chapter="transit" id="know" eyebrow="For registered participants" title="Know before<br />you go" accent="pink" wide>
+  <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+    {
+      cards.map((c) => (
+        <div class="panel rounded-3xl p-6 sm:p-7">
+          <h3 class="eyebrow text-pink">{c.title}</h3>
+          <ul class="mt-4 space-y-2.5">
+            {c.items.map((i) => (
+              <li class="text-[0.9375rem] leading-relaxed text-ink-2">{i}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+  <p class="scrim-text mt-6 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
+    Join our <a href={DISCORD_URL} target="_blank" rel="noopener" class={link}>Discord</a> for event updates. Joining Discord does not give you access to the event.
+    Under 18? Read the <a href="/legal#minors" class={link}>rules for participants under 18</a>.
+  </p>
+</Section>

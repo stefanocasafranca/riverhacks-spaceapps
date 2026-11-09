@@ -1,6 +1,8 @@
 ---
 import Section from './Section.astro';
-import { PRIZES, DEADLINES } from '../data/event';
+import { PRIZES, DEADLINES, ELEVENLABS, SERPAPI_PERKS } from '../data/event';
+
+const link = 'font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan';
 ---
 
 <Section chapter="orbit" id="prizes" eyebrow="What you're playing for" title="Prizes" accent="gold">
@@ -12,33 +14,41 @@ import { PRIZES, DEADLINES } from '../data/event';
         <p class="display text-[clamp(2rem,9vw,3.25rem)] text-gold">{PRIZES.total}</p>
       </div>
 
-      <ul class="mt-2 divide-y divide-white/8">
-        {
-          PRIZES.awards.map((a) => (
-            <li class="flex items-center gap-4 py-4">
-              <span aria-hidden="true" class="text-xl leading-none sm:text-2xl">
-                {a.medal}
-              </span>
-              <div class="min-w-0 flex-1">
-                <p class="text-[0.95rem] font-medium text-ink sm:text-base">{a.place}</p>
-                {'note' in a && a.note && (
-                  <p class="mt-1 text-[0.8125rem] leading-snug text-ink-3">{a.note}</p>
-                )}
-              </div>
-              <span
-                class:list={[
-                  'display shrink-0 text-[clamp(1.15rem,5vw,1.75rem)] tabular-nums',
-                  a.accent === 'gold' && 'text-gold',
-                  a.accent === 'violet' && 'text-violet',
-                  a.accent === 'ink' && 'text-ink',
-                ]}
-              >
-                {a.amount}
-              </span>
-            </li>
-          ))
-        }
-      </ul>
+      {
+        PRIZES.groups.map((g) => (
+          <div class="mt-6">
+            <div class="flex items-baseline justify-between gap-4">
+              <h4 class="eyebrow text-cyan">{g.label}</h4>
+              <p class="display text-[clamp(1.15rem,5vw,1.5rem)] tabular-nums text-ink">{g.subtotal}</p>
+            </div>
+            <ul class="mt-1 divide-y divide-white/8">
+              {g.awards.map((a) => (
+                <li class="flex items-center gap-4 py-4">
+                  <span aria-hidden="true" class="text-xl leading-none sm:text-2xl">
+                    {a.medal}
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-[0.95rem] font-medium text-ink sm:text-base">{a.place}</p>
+                    {'note' in a && a.note && (
+                      <p class="mt-1 text-[0.8125rem] leading-snug text-ink-3">{a.note}</p>
+                    )}
+                  </div>
+                  <span
+                    class:list={[
+                      'display shrink-0 text-[clamp(1.15rem,5vw,1.75rem)] tabular-nums',
+                      a.accent === 'gold' && 'text-gold',
+                      a.accent === 'violet' && 'text-violet',
+                      a.accent === 'ink' && 'text-ink',
+                    ]}
+                  >
+                    {a.amount}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
     </div>
 
     <!-- The two Sunday deadlines sit next to the prizes: what you win, and when
@@ -67,6 +77,49 @@ import { PRIZES, DEADLINES } from '../data/event';
       <p class="mt-7 border-t border-white/10 pt-5 text-[0.8125rem] leading-relaxed text-ink-3">
         Ship once before 1:00 PM to be judged in Austin, then push the same project to the
         global submission by 11:59 PM.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-5 grid gap-5 lg:grid-cols-2">
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="eyebrow text-violet">ElevenLabs prizes</h3>
+      <ul class="mt-5 space-y-4">
+        {
+          ELEVENLABS.prizes.map((p) => (
+            <li>
+              <p class="text-[0.95rem] font-medium text-ink sm:text-base">{p.place}</p>
+              <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">{p.detail}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-6 text-[0.95rem] font-medium text-ink sm:text-base">Every participant</p>
+      <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">{ELEVENLABS.everyone} To claim yours:</p>
+      <ol class="mt-3 list-decimal space-y-1.5 pl-5 text-[0.9375rem] leading-relaxed text-ink-2">
+        <li>Join the <a href={ELEVENLABS.discord} target="_blank" rel="noopener" class={link}>ElevenLabs Discord</a>.</li>
+        <li>Gain access to the #coupon-codes channel and click Start Redemption.</li>
+        <li>Select the event and fill out the form using the email you used for registration. The bot sends your unique coupon code.</li>
+      </ol>
+      <p class="mt-4 text-[0.9375rem] leading-relaxed text-ink-2">
+        <a href={ELEVENLABS.tutorial} target="_blank" rel="noopener" class={link}>Video tutorial</a> ·
+        <a href={ELEVENLABS.guide} target="_blank" rel="noopener" class={link}>ElevenLabs Hacker Guide</a>
+      </p>
+    </div>
+
+    <div class="panel rounded-3xl p-6 sm:p-8">
+      <h3 class="eyebrow text-violet">From SerpApi</h3>
+      <p class="mt-5 text-[0.95rem] font-medium text-ink sm:text-base">Looking for a job?</p>
+      <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
+        If you have the experience, apply through
+        <a href={SERPAPI_PERKS.careers} target="_blank" rel="noopener" class={link}>serpapi.com/careers</a>.
+        In the email where you attach your resume, please use the subject:
+        <strong class="font-semibold text-ink">{SERPAPI_PERKS.careersSubject}</strong>
+      </p>
+      <p class="mt-6 text-[0.95rem] font-medium text-ink sm:text-base">1,000 free web searches</p>
+      <p class="mt-1 text-[0.9375rem] leading-relaxed text-ink-2">
+        Go to <a href={SERPAPI_PERKS.coupon} target="_blank" rel="noopener" class={link}>serpapi.com/riverhacksnasa</a>
+        and create a free SerpApi account or sign in. New accounts verify their email and phone number first.
       </p>
     </div>
   </div>

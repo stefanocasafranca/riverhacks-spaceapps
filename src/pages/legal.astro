@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
 import Footer from '../components/Footer.astro';
-import OrientationNotice from '../components/OrientationNotice.astro';
 import {
   EVENT,
   REGISTRATION,
@@ -26,7 +25,9 @@ const MINOR_RULES = [
   `Age counts on November 14, 2026. If you were born after November 14, 2008, ${b('you are under 18 for this event and these rules apply to you')}.`,
   'Ages 12-17 can participate and compete for prizes.',
   `${b('A parent or guardian must stay on campus with you at all times.')} No exceptions, even with a signed waiver.`,
-  'One guardian can cover up to 6 participants (one team).',
+  'One registered supervising adult can cover up to 6 participants, with a maximum of 2 adults per team.',
+  `The supervising adult ${b('shows photo ID at check-in and at check-out')}. A participant leaves only with their registered adult.`,
+  `${b('Saturday 5:00 PM:')} hand back your lanyard and keep your ${b('yellow card')}. ${b('Sunday:')} show the yellow card to get your lanyard back, from 8:00 AM.`,
   `${b('All participants under 18 leave at 5:00 PM on Saturday, November 14')}, and keep building from home. ${b('The overnight session is for participants 18 and older only.')}`,
   `Your parent or guardian must sign the consent form by ${b(MINORS_DEADLINE)}. ${b('It is required to participate.')}`,
   `${b('Parents and guardians must attend the required Google Meet orientation')} on ${b(ORIENTATION.date)} (${ORIENTATION.time ?? ORIENTATION.timeTba.toLowerCase()}). ${b('It is required to participate.')} We strongly recommend that you attend with them.`,
@@ -74,8 +75,6 @@ const stepNum =
 
   <main id="main" class="relative px-5 pt-10 pb-20 sm:px-8 sm:pt-16 lg:px-12">
     <div class="mx-auto max-w-3xl">
-      <OrientationNotice class="mb-12" />
-
       <header class="scrim-text mb-12">
         <p class="eyebrow mb-4 text-cyan">RiverHacks 2026</p>
         <h1 class="display text-[clamp(2.5rem,11vw,4.5rem)]">Legal</h1>
@@ -111,7 +110,7 @@ const stepNum =
           <h3 class="eyebrow text-pink">Ages 11 and under</h3>
           <p class="mt-3 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
             Born after November 14, 2014: Saturday-only elementary activation, 9:00 AM to 12:00 PM,
-            with a parent or guardian present. Limited to 30 kids. Not eligible for prizes and cannot
+            1 adult for up to 4 kids. Limited to 30 kids. Not eligible for prizes and cannot
             stay past noon.
           </p>
         </div>
@@ -168,7 +167,7 @@ const stepNum =
           <li class="flex gap-4 py-5 last:pb-0">
             <span aria-hidden="true" class={stepNum}>4</span>
             <p class="pt-1 text-[0.9375rem] leading-relaxed text-ink-2 sm:text-base">
-              Arrive with your parent or guardian on Saturday, November 14, 9:00 AM, ACC Rio Grande
+              Arrive with your parent or guardian on Saturday, November 14, 8:00 AM, ACC Rio Grande
               Campus, Building 1000, 1212 Rio Grande St, Austin TX 78701.
             </p>
           </li>
@@ -217,8 +216,7 @@ const stepNum =
                   <>
                     <strong class="font-semibold text-ink">Everyone must sign the RiverHacks Participant Waiver before the event</strong>{' '}
                     <span class="text-ink-3" aria-disabled="true">
-                      (coming soon, available by October 5, 2026). We are finalizing it with
-                      ACC.</span
+                      (sent by email to registered participants).</span
                     >
                   </>
                 )
