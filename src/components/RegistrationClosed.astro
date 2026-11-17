@@ -1,13 +1,11 @@
 ---
-import { REGISTRATION, SPACE_APPS_URL } from '../data/event';
+import { REGISTRATION } from '../data/event';
 
 interface Props {
   align?: 'left' | 'center';
   size?: 'lg' | 'md';
 }
 const { align = 'left', size = 'md' } = Astro.props;
-const link =
-  'font-medium text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:decoration-cyan';
 ---
 
 <div class:list={[align === 'center' && 'text-center']}>
@@ -25,11 +23,6 @@ const link =
       align === 'center' && 'mx-auto max-w-xl',
     ]}
   >
-    <li>
-      {REGISTRATION.spaceApps}{' '}
-      <a href={SPACE_APPS_URL} target="_blank" rel="noopener" class={link}>
-        spaceappschallenge.org
-      </a>
-    </li>
+    <li>{REGISTRATION.thanks}</li>
   </ul>
 </div>

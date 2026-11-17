@@ -15,8 +15,11 @@ export const REGISTER_URL = 'https://luma.com/n9rvutt0';
 
 // --- Registration status ----------------------------------------------------
 export const REGISTRATION = {
-  closed: 'Registrations are closed.',
+  closed: 'RiverHacks 2026 is complete. Thank you for participating!',
   spaceApps: 'Online Participation through',
+  // Post-event (Nov 16, 2026): replaces the online-participation line in the hero.
+  thanks:
+    'Thank you to every participant, mentor, judge, volunteer and sponsor who made this weekend happen. Keep building.',
 } as const;
 
 // --- Legal / minors ---------------------------------------------------------
@@ -363,5 +366,5 @@ export const CREDITS = [
 export const SEO = {
   title: 'RiverHacks 2026 — Austin’s NASA Space Apps Challenge',
   description:
-    'Nov 14–15, 2026 · Austin, TX. Registrations are closed. $10,950 in prizes, all skill levels. One weekend, one project, two competitions.',
+    'Nov 14–15, 2026 · Austin, TX. The event is complete. Thank you for participating. $10,950 in prizes, all skill levels. One weekend, one project, two competitions.',
 } as const;
