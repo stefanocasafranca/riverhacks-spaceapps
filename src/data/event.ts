@@ -17,9 +17,6 @@ export const REGISTER_URL = 'https://luma.com/n9rvutt0';
 export const REGISTRATION = {
   closed: 'RiverHacks 2026 is complete. Thank you for participating!',
   spaceApps: 'Online Participation through',
-  // Post-event (Nov 16, 2026): replaces the online-participation line in the hero.
-  thanks:
-    'Thank you to every participant, mentor, judge, volunteer and sponsor who made this weekend happen. Keep building.',
 } as const;
 
 // --- Legal / minors ---------------------------------------------------------
